@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "InputMappingContext.h"
+#include "Weapon.h"
 #include "GT3_Project5_Gr1Character.generated.h"
 
 
@@ -36,10 +38,15 @@ class AGT3_Project5_Gr1Character : public ACharacter
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
+	
+	UPROPERTY(VisibleAnywhere)
+	AWeapon* Weapon;
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWeapon> WeaponType;
 
 public:
 	AGT3_Project5_Gr1Character();
-	
 
 protected:
 
