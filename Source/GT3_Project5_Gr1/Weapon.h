@@ -11,8 +11,8 @@ class GT3_PROJECT5_GR1_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* VisualMesh;
+	UPROPERTY(EditAnywhere)
+	USkeletalMeshComponent* VisualMesh;
 
 public:
 	// Sets default values for this actor's properties

@@ -10,17 +10,11 @@ AWeapon::AWeapon()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	VisualMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	VisualMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	VisualMesh->SetupAttachment(RootComponent);
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeVisualAsset(TEXT("/Game/StarterContent/Shapes/Shape_Cube.Shape_Cube"));
-
-	if (CubeVisualAsset.Succeeded())
-	{
-		VisualMesh->SetStaticMesh(CubeVisualAsset.Object);
-		VisualMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-		VisualMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	}
+	VisualMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+	VisualMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called when the game starts or when spawned

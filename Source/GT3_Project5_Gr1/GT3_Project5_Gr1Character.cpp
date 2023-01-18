@@ -94,7 +94,8 @@ void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGT3_Project5_Gr1Character::Look);
-
+		
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AGT3_Project5_Gr1Character::Shoot);
 	}
 
 }
@@ -133,6 +134,13 @@ void AGT3_Project5_Gr1Character::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AGT3_Project5_Gr1Character::Shoot(const FInputActionValue& Value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Shoot"));
+
+	PlayAnimMontage(ShootMontage);
 }
 
 
