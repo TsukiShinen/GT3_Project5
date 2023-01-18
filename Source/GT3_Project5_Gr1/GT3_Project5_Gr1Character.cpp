@@ -73,7 +73,7 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 	Weapon = GetWorld()->SpawnActor<AWeapon>(WeaponType, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 	if (Weapon)
 	{
-		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("Weapon_R"));
+		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Weapon_R"));
 	}
 }
 
@@ -95,7 +95,9 @@ void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGT3_Project5_Gr1Character::Look);
 		
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AGT3_Project5_Gr1Character::Aim);
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AGT3_Project5_Gr1Character::Shoot);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AGT3_Project5_Gr1Character::EndShoot);
 	}
 
 }
@@ -136,11 +138,23 @@ void AGT3_Project5_Gr1Character::Look(const FInputActionValue& Value)
 	}
 }
 
+void AGT3_Project5_Gr1Character::Aim(const FInputActionValue& Value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Aim"));
+	
+	PlayAnimMontage(ShootMontage, 1, TEXT("Aim"));
+}
+
 void AGT3_Project5_Gr1Character::Shoot(const FInputActionValue& Value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Shoot"));
 
-	PlayAnimMontage(ShootMontage);
+	PlayAnimMontage(ShootMontage, 1, TEXT("Shoot"));
+}
+
+void AGT3_Project5_Gr1Character::EndShoot(const FInputActionValue& Value)
+{
+	StopAnimMontage(ShootMontage);
 }
 
 
