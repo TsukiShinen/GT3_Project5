@@ -40,6 +40,9 @@ class AGT3_Project5_Gr1Character : public ACharacter
 	class UInputAction* LookAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* AimAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ShootAction;
 	
 	UPROPERTY(VisibleAnywhere)
@@ -62,7 +65,9 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 	
+	void Aim(const FInputActionValue& Value);
 	void Shoot(const FInputActionValue& Value);
+	void EndShoot(const FInputActionValue& Value);
 			
 
 protected:
