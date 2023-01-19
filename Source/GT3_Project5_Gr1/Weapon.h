@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/ArrowComponent.h"
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
@@ -11,6 +12,9 @@ class GT3_PROJECT5_GR1_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere)
+	UArrowComponent* SpawnBullet;
+	
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* VisualMesh;
 
@@ -25,4 +29,6 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void Shoot(FVector End);
 };

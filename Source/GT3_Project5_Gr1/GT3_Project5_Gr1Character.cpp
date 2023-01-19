@@ -28,7 +28,8 @@ AGT3_Project5_Gr1Character::AGT3_Project5_Gr1Character()
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+	GetCharacterMovement()->bOrientRotationToMovement = false; // Character moves in the direction of input...	
+	GetCharacterMovement()->bUseControllerDesiredRotation = true; // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
 
 	// Note: For faster iteration times these variables, and many more, can be tweaked in the Character Blueprint
@@ -166,6 +167,21 @@ void AGT3_Project5_Gr1Character::Shoot(const FInputActionValue& Value)
 	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
 	OnMontageBlendingOutStarted.BindUFunction(this, "EndShoot");
 	AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
+
+	FVector start = FollowCamera->GetComponentLocation();
+	FVector dir = FollowCamera->GetForwardVector();
+	FVector end  = start + (dir * 100000);
+	FHitResult hit;
+	
+	bool bIsActorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, FCollisionQueryParams(), FCollisionResponseParams());
+	if (bIsActorHit && hit.GetActor())
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetName());
+		Weapon->Shoot(hit.ImpactPoint);
+	} else
+	{
+		Weapon->Shoot(end);
+	}
 }
 
 void AGT3_Project5_Gr1Character::EndAim(const FInputActionValue& Value)
