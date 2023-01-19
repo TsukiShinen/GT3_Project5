@@ -44,6 +44,13 @@ class AGT3_Project5_Gr1Character : public ACharacter
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ShootAction;
+
+
+	UPROPERTY(EditAnywhere, Category = "Stats")
+	float MaxWalkSpeed = 500.0f;
+	
+	UPROPERTY(EditAnywhere, Category = "Stats")
+	float MaxWalkSpeedWhileAiming = 250.0f;
 	
 	UPROPERTY(VisibleAnywhere)
 	AWeapon* Weapon;
@@ -53,6 +60,15 @@ class AGT3_Project5_Gr1Character : public ACharacter
 	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* ShootMontage;
+	
+	UPROPERTY(EditAnywhere)
+	UAnimInstance* AnimInstance;
+	
+	UPROPERTY(VisibleAnywhere)
+	bool bIsAiming;
+	
+	UPROPERTY(VisibleAnywhere)
+	bool bIsShooting;
 
 public:
 	AGT3_Project5_Gr1Character();
@@ -67,7 +83,9 @@ protected:
 	
 	void Aim(const FInputActionValue& Value);
 	void Shoot(const FInputActionValue& Value);
-	void EndShoot(const FInputActionValue& Value);
+	void EndAim(const FInputActionValue& Value);
+	UFUNCTION(BlueprintCallable)
+	void EndShoot();
 			
 
 protected:

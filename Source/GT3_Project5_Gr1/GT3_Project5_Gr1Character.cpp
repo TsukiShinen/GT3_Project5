@@ -35,20 +35,21 @@ AGT3_Project5_Gr1Character::AGT3_Project5_Gr1Character()
 	// instead of recompiling to adjust them
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
+	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-
+	
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	FollowCamera->SetRelativeLocation(FVector(0, 100, 0));
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -75,6 +76,8 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 	{
 		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Weapon_R"));
 	}
+
+	AnimInstance = GetMesh()->GetAnimInstance();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -97,7 +100,7 @@ void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent
 		
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AGT3_Project5_Gr1Character::Aim);
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AGT3_Project5_Gr1Character::Shoot);
-		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AGT3_Project5_Gr1Character::EndShoot);
+		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AGT3_Project5_Gr1Character::EndAim);
 	}
 
 }
@@ -140,21 +143,55 @@ void AGT3_Project5_Gr1Character::Look(const FInputActionValue& Value)
 
 void AGT3_Project5_Gr1Character::Aim(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Aim"));
-	
-	PlayAnimMontage(ShootMontage, 1, TEXT("Aim"));
+	bIsAiming = true;
+	FollowCamera->SetRelativeLocation(FVector(0, 50, 50));
+	CameraBoom->TargetArmLength = 70.0f;
+
+	if (!bIsShooting)
+	{
+		AnimInstance->Montage_Play(ShootMontage);
+		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeedWhileAiming;
+	}
 }
 
 void AGT3_Project5_Gr1Character::Shoot(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Shoot"));
+	if (bIsShooting) return;
+	
+	bIsShooting = true;
 
-	PlayAnimMontage(ShootMontage, 1, TEXT("Shoot"));
+	AnimInstance->Montage_Play(ShootMontage);
+	AnimInstance->Montage_JumpToSection(TEXT("Shoot"), ShootMontage);
+
+	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
+	OnMontageBlendingOutStarted.BindUFunction(this, "EndShoot");
+	AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
 }
 
-void AGT3_Project5_Gr1Character::EndShoot(const FInputActionValue& Value)
+void AGT3_Project5_Gr1Character::EndAim(const FInputActionValue& Value)
 {
-	StopAnimMontage(ShootMontage);
+	bIsAiming = false;
+
+	if (!bIsShooting)
+	{
+		AnimInstance->Montage_Stop(.5f, ShootMontage);
+	}
+	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+	FollowCamera->SetRelativeLocation(FVector(0, 100, 0));
+	CameraBoom->TargetArmLength = 300.0f;
+}
+
+void AGT3_Project5_Gr1Character::EndShoot()
+{
+	bIsShooting = false;
+	
+	if (bIsAiming)
+	{
+		FollowCamera->SetRelativeLocation(FVector(0, 50, 50));
+		CameraBoom->TargetArmLength = 70.0f;
+		AnimInstance->Montage_Play(ShootMontage);
+		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeedWhileAiming;
+	}
 }
 
 
