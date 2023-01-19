@@ -7,14 +7,18 @@ ATestAIC::ATestAIC()
 
 void ATestAIC::BeginPlay()
 {
+	Super::BeginPlay();
+
+	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
+}
+
+void ATestAIC::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 	MoveToActor();
 }
 
 EPathFollowingRequestResult::Type ATestAIC::MoveToActor()
 {
-	ACharacter* Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-
-	//AActor* Actor = Cast<AActor>(Character); Note a moi même : Ne fonctionne pas -_-
-
-	return Super::MoveToActor((AActor*)Player);
+	return Super::MoveToActor(Player);
 }

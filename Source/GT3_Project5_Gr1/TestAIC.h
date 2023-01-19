@@ -10,11 +10,17 @@ class GT3_PROJECT5_GR1_API ATestAIC : public AAIController
 {
 	GENERATED_BODY()
 	
+protected:
+	class AActor* Player;
+
 public:
 	ATestAIC();
 
 	EPathFollowingRequestResult::Type MoveToActor();
 
 protected:
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
+
+public:
+	virtual void Tick(float DeltaTime) override;
 };
