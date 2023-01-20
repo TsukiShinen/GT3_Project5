@@ -177,7 +177,7 @@ void AGT3_Project5_Gr1Character::Shoot(const FInputActionValue& Value)
 	if (bIsActorHit && hit.GetActor())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetName());
-		Weapon->Shoot(hit.ImpactPoint);
+		Weapon->Shoot(hit.ImpactPoint, hit.GetActor());
 	} else
 	{
 		Weapon->Shoot(end);

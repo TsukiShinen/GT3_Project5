@@ -69,9 +69,16 @@ class AGT3_Project5_Gr1Character : public ACharacter
 	
 	UPROPERTY(VisibleAnywhere)
 	bool bIsShooting;
+	
+	UPROPERTY(VisibleAnywhere)
+	int Score = 0;
 
 public:
 	AGT3_Project5_Gr1Character();
+
+	UFUNCTION(BlueprintCallable)
+	int GetScore() const { return Score; }
+	void AddScore(int score) { Score += score; }
 
 protected:
 

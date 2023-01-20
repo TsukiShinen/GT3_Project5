@@ -3,6 +3,8 @@
 
 #include "Weapon.h"
 
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 AWeapon::AWeapon()
@@ -32,8 +34,13 @@ void AWeapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AWeapon::Shoot(FVector End)
+void AWeapon::Shoot(FVector End, AActor* Actor)
 {
 	DrawDebugLine(GetWorld(), SpawnBullet->GetComponentLocation(), End, FColor::Red, false, 2.0f, .0f, 10.0f);
+	if (Actor)
+	{
+		UGameplayStatics::ApplyDamage(Actor, Damage,
+			UGameplayStatics::GetPlayerController(GetWorld(), 0), this, DamageType); 
+	}
 }
 

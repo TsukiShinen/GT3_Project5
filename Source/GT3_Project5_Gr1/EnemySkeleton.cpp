@@ -2,6 +2,8 @@
 
 
 #include "EnemySkeleton.h"
+#include "GT3_Project5_Gr1Character.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AEnemySkeleton::AEnemySkeleton()
@@ -33,5 +35,24 @@ void AEnemySkeleton::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+float AEnemySkeleton::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	Life -= Damage;
+	if (Life <= 0)
+	{
+		Life = 0;
+		K2_DestroyActor();
+		AGT3_Project5_Gr1Character* Player = Cast<AGT3_Project5_Gr1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+		if (Player)
+		{
+			Player->AddScore(10);
+			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::FromInt(Player->GetScore()));
+		}
+	}
+	
+	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
 

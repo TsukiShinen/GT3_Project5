@@ -18,6 +18,12 @@ class GT3_PROJECT5_GR1_API AWeapon : public AActor
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* VisualMesh;
 
+	UPROPERTY(EditAnywhere)
+	float Damage = 50;
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UDamageType> DamageType;
+	
 public:
 	// Sets default values for this actor's properties
 	AWeapon();
@@ -30,5 +36,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void Shoot(FVector End);
+	void Shoot(FVector End, AActor* Actor = nullptr);
 };
