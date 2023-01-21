@@ -43,14 +43,14 @@ AGT3_Project5_Gr1Character::AGT3_Project5_Gr1Character()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
+	CameraBoom->TargetArmLength = CameraArmLenght; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 	
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-	FollowCamera->SetRelativeLocation(FVector(0, 100, 0));
+	FollowCamera->SetRelativeLocation(FollowCameraOffset);
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -145,8 +145,8 @@ void AGT3_Project5_Gr1Character::Look(const FInputActionValue& Value)
 void AGT3_Project5_Gr1Character::Aim(const FInputActionValue& Value)
 {
 	bIsAiming = true;
-	FollowCamera->SetRelativeLocation(FVector(0, 50, 50));
-	CameraBoom->TargetArmLength = 70.0f;
+	FollowCamera->SetRelativeLocation(FollowCameraOffsetAiming);
+	CameraBoom->TargetArmLength = CameraArmLenghtAiming;
 
 	if (!bIsShooting)
 	{
@@ -193,8 +193,8 @@ void AGT3_Project5_Gr1Character::EndAim(const FInputActionValue& Value)
 		AnimInstance->Montage_Stop(.5f, ShootMontage);
 	}
 	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
-	FollowCamera->SetRelativeLocation(FVector(0, 100, 0));
-	CameraBoom->TargetArmLength = 300.0f;
+	FollowCamera->SetRelativeLocation(FollowCameraOffset);
+	CameraBoom->TargetArmLength = CameraArmLenght;
 }
 
 void AGT3_Project5_Gr1Character::EndShoot()
@@ -203,8 +203,8 @@ void AGT3_Project5_Gr1Character::EndShoot()
 	
 	if (bIsAiming)
 	{
-		FollowCamera->SetRelativeLocation(FVector(0, 50, 50));
-		CameraBoom->TargetArmLength = 70.0f;
+		FollowCamera->SetRelativeLocation(FollowCameraOffsetAiming);
+		CameraBoom->TargetArmLength = CameraArmLenghtAiming;
 		AnimInstance->Montage_Play(ShootMontage);
 		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeedWhileAiming;
 	}

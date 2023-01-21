@@ -93,7 +93,18 @@ protected:
 	void EndAim(const FInputActionValue& Value);
 	UFUNCTION(BlueprintCallable)
 	void EndShoot();
-			
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	float CameraArmLenght = 300.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	FVector FollowCameraOffset;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	float CameraArmLenghtAiming = 70.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	FVector FollowCameraOffsetAiming;
 
 protected:
 	// APawn interface

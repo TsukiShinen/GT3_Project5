@@ -23,7 +23,7 @@ class GT3_PROJECT5_GR1_API AWeapon : public AActor
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UDamageType> DamageType;
-	
+
 public:
 	// Sets default values for this actor's properties
 	AWeapon();
