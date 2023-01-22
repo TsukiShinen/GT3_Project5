@@ -54,6 +54,8 @@ AGT3_Project5_Gr1Character::AGT3_Project5_Gr1Character()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+	HoldWeapon = CreateDefaultSubobject<UHoldWeapon>(TEXT("Hold Weapon"));
+	AddOwnedComponent(HoldWeapon);
 }
 
 void AGT3_Project5_Gr1Character::BeginPlay()
@@ -69,16 +71,20 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-	
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	Weapon = GetWorld()->SpawnActor<AWeapon>(WeaponType, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-	if (Weapon)
-	{
-		Weapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Weapon_R"));
-	}
 
-	AnimInstance = GetMesh()->GetAnimInstance();
+	HoldWeapon->AttachWeapon(WeaponType, GetMesh());
+	HoldWeapon->AimingStartEvent.AddLambda([&]()->void
+	{
+		FollowCamera->SetRelativeLocation(FollowCameraOffsetAiming);
+		CameraBoom->TargetArmLength = CameraArmLenghtAiming;
+		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeedWhileAiming;
+	});
+	HoldWeapon->OnEndAim().AddLambda([&]()->void
+	{
+		FollowCamera->SetRelativeLocation(FollowCameraOffset);
+		CameraBoom->TargetArmLength = CameraArmLenght;
+		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+	});
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -98,10 +104,8 @@ void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent
 
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGT3_Project5_Gr1Character::Look);
-		
-		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AGT3_Project5_Gr1Character::Aim);
-		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AGT3_Project5_Gr1Character::Shoot);
-		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AGT3_Project5_Gr1Character::EndAim);
+
+		HoldWeapon->SetupPlayerInputComponent(EnhancedInputComponent);
 	}
 
 }
@@ -141,75 +145,3 @@ void AGT3_Project5_Gr1Character::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
-
-void AGT3_Project5_Gr1Character::Aim(const FInputActionValue& Value)
-{
-	bIsAiming = true;
-	FollowCamera->SetRelativeLocation(FollowCameraOffsetAiming);
-	CameraBoom->TargetArmLength = CameraArmLenghtAiming;
-
-	if (!bIsShooting)
-	{
-		AnimInstance->Montage_Play(ShootMontage);
-		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeedWhileAiming;
-	}
-}
-
-void AGT3_Project5_Gr1Character::Shoot(const FInputActionValue& Value)
-{
-	if (bIsShooting) return;
-	
-	bIsShooting = true;
-
-	AnimInstance->Montage_Play(ShootMontage);
-	AnimInstance->Montage_JumpToSection(TEXT("Shoot"), ShootMontage);
-
-	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
-	OnMontageBlendingOutStarted.BindUFunction(this, "EndShoot");
-	AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
-
-	FVector start = FollowCamera->GetComponentLocation();
-	FVector dir = FollowCamera->GetForwardVector();
-	FVector end  = start + (dir * 100000);
-	FHitResult hit;
-	
-	bool bIsActorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, FCollisionQueryParams(), FCollisionResponseParams());
-	if (bIsActorHit && hit.GetActor())
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetName());
-		Weapon->Shoot(hit.ImpactPoint, hit.GetActor());
-	} else
-	{
-		Weapon->Shoot(end);
-	}
-}
-
-void AGT3_Project5_Gr1Character::EndAim(const FInputActionValue& Value)
-{
-	bIsAiming = false;
-
-	if (!bIsShooting)
-	{
-		AnimInstance->Montage_Stop(.5f, ShootMontage);
-	}
-	GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
-	FollowCamera->SetRelativeLocation(FollowCameraOffset);
-	CameraBoom->TargetArmLength = CameraArmLenght;
-}
-
-void AGT3_Project5_Gr1Character::EndShoot()
-{
-	bIsShooting = false;
-	
-	if (bIsAiming)
-	{
-		FollowCamera->SetRelativeLocation(FollowCameraOffsetAiming);
-		CameraBoom->TargetArmLength = CameraArmLenghtAiming;
-		AnimInstance->Montage_Play(ShootMontage);
-		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeedWhileAiming;
-	}
-}
-
-
-
-

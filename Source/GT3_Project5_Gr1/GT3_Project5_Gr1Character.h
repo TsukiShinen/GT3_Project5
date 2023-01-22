@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HoldWeapon.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "InputMappingContext.h"
-#include "Weapon.h"
 #include "GT3_Project5_Gr1Character.generated.h"
 
 
@@ -39,36 +39,14 @@ class AGT3_Project5_Gr1Character : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* AimAction;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* ShootAction;
-
-
 	UPROPERTY(EditAnywhere, Category = "Stats")
 	float MaxWalkSpeed = 500.0f;
 	
 	UPROPERTY(EditAnywhere, Category = "Stats")
 	float MaxWalkSpeedWhileAiming = 250.0f;
 	
-	UPROPERTY(VisibleAnywhere)
-	AWeapon* Weapon;
-	
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AWeapon> WeaponType;
-	
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* ShootMontage;
-	
 	UPROPERTY(EditAnywhere)
 	UAnimInstance* AnimInstance;
-	
-	UPROPERTY(VisibleAnywhere)
-	bool bIsAiming;
-	
-	UPROPERTY(VisibleAnywhere)
-	bool bIsShooting;
 	
 	UPROPERTY(VisibleAnywhere)
 	int Score = 0;
@@ -88,12 +66,6 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 	
-	void Aim(const FInputActionValue& Value);
-	void Shoot(const FInputActionValue& Value);
-	void EndAim(const FInputActionValue& Value);
-	UFUNCTION(BlueprintCallable)
-	void EndShoot();
-	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
 	float CameraArmLenght = 300.0f;
 	
@@ -105,6 +77,12 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
 	FVector FollowCameraOffsetAiming;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Weapon")
+	UHoldWeapon* HoldWeapon;
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWeapon> WeaponType;
 
 protected:
 	// APawn interface
