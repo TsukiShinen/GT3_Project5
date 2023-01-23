@@ -95,6 +95,9 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	UFUNCTION()
+	void OnWeaponChanged() { HoldWeapon->SwitchWeapon(Inventory->GetCurrentWeapon()); }
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

@@ -32,7 +32,6 @@ void UInventory::LoadWeapon(USkeletalMeshComponent* Mesh)
 	}
 }
 
-
 // Called when the game starts
 void UInventory::BeginPlay()
 {
@@ -44,6 +43,17 @@ void UInventory::BeginPlay()
 
 void UInventory::SetupPlayerInputComponent(UEnhancedInputComponent* EnhancedInputComponent)
 {
+	EnhancedInputComponent->BindAction(ChangeWeaponAction, ETriggerEvent::Triggered, this, &UInventory::ChangeWeapon);
+}
+
+void UInventory::ChangeWeapon(const FInputActionValue& Value)
+{
+	const int IndexChange = Value.Get<float>();
+	CurrentWeaponIndex += IndexChange;
+	if (CurrentWeaponIndex < 0) CurrentWeaponIndex += Weapons.Num();
+	if (CurrentWeaponIndex >= Weapons.Num()) CurrentWeaponIndex -= Weapons.Num();
+	
+	OnWeaponChanged.Broadcast();
 }
 
 

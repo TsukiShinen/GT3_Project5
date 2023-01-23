@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "Weapon.h"
 #include "Components/ActorComponent.h"
 #include "Inventory.generated.h"
@@ -13,19 +14,24 @@ class GT3_PROJECT5_GR1_API UInventory : public UActorComponent
 {
 	GENERATED_BODY()
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeaponChanged);
+
 public:
 	// Sets default values for this component's properties
 	UInventory();
+	
+	void SetupPlayerInputComponent(class UEnhancedInputComponent* EnhancedInputComponent);
+	void ChangeWeapon(const FInputActionValue& Value);
 
 	void LoadWeapon(USkeletalMeshComponent* Mesh);
 
 	AWeapon* GetCurrentWeapon() { return Weapons[CurrentWeaponIndex]; }
+	UPROPERTY()
+	FOnWeaponChanged OnWeaponChanged;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	
-	void SetupPlayerInputComponent(class UEnhancedInputComponent* EnhancedInputComponent);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ChangeWeaponAction;

@@ -76,6 +76,8 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 
 	Inventory->LoadWeapon(GetMesh());
 
+	Inventory->OnWeaponChanged.AddDynamic(this, &AGT3_Project5_Gr1Character::OnWeaponChanged);
+
 	HoldWeapon->SetAnimInstance(GetMesh()->GetAnimInstance());
 	HoldWeapon->SwitchWeapon(Inventory->GetCurrentWeapon());
 	
@@ -111,6 +113,7 @@ void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGT3_Project5_Gr1Character::Look);
 
+		Inventory->SetupPlayerInputComponent(EnhancedInputComponent);
 		HoldWeapon->SetupPlayerInputComponent(EnhancedInputComponent);
 	}
 
