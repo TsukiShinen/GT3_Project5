@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "InputMappingContext.h"
+#include "Inventory.h"
 #include "GT3_Project5_Gr1Character.generated.h"
 
 
@@ -81,8 +82,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Weapon")
 	UHoldWeapon* HoldWeapon;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Weapon")
 	TSubclassOf<AWeapon> WeaponType;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Inventory")
+	UInventory* Inventory;
 
 protected:
 	// APawn interface

@@ -45,11 +45,9 @@ float AEnemySkeleton::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 	{
 		Life = 0;
 		K2_DestroyActor();
-		AGT3_Project5_Gr1Character* Player = Cast<AGT3_Project5_Gr1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-		if (Player)
+		if (AGT3_Project5_Gr1Character* Player = Cast<AGT3_Project5_Gr1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 		{
 			Player->AddScore(10);
-			GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, FString::FromInt(Player->GetScore()));
 		}
 	}
 	

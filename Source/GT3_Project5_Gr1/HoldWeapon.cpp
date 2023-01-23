@@ -3,8 +3,6 @@
 
 #include "HoldWeapon.h"
 #include "EnhancedInputComponent.h"
-#include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values for this component's properties
@@ -19,23 +17,18 @@ void UHoldWeapon::SetupPlayerInputComponent(UEnhancedInputComponent* EnhancedInp
 {
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &UHoldWeapon::Aim);
 	EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &UHoldWeapon::Shoot);
+	EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &UHoldWeapon::ShootAuto);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &UHoldWeapon::EndAim);
 }
 
-void UHoldWeapon::AttachWeapon(TSubclassOf<AWeapon> WeaponType, USkeletalMeshComponent* Mesh)
+void UHoldWeapon::SwitchWeapon(AWeapon* NewWeapon)
 {
-	if (!AnimInstance)
-	{
-		AnimInstance = Mesh->GetAnimInstance();
-	}
-	
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	Weapon = GetWorld()->SpawnActor<AWeapon>(WeaponType, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 	if (Weapon)
 	{
-		Weapon->AttachToComponent(Mesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Weapon_R"));
+		Weapon->SetActorHiddenInGame(true);
 	}
+	Weapon = NewWeapon;
+	Weapon->SetActorHiddenInGame(false);
 }
 
 // Called when the game starts
@@ -76,11 +69,18 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 	bool bIsActorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, FCollisionQueryParams(), FCollisionResponseParams());
 	if (bIsActorHit && hit.GetActor())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetName());
 		Weapon->Shoot(hit.ImpactPoint, hit.GetActor());
 	} else
 	{
 		Weapon->Shoot(end);
+	}
+}
+
+void UHoldWeapon::ShootAuto(const FInputActionValue& Value)
+{
+	if (Weapon->IsAuto())
+	{
+		Shoot(Value);
 	}
 }
 

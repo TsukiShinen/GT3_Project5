@@ -56,6 +56,8 @@ AGT3_Project5_Gr1Character::AGT3_Project5_Gr1Character()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 	HoldWeapon = CreateDefaultSubobject<UHoldWeapon>(TEXT("Hold Weapon"));
 	AddOwnedComponent(HoldWeapon);
+	Inventory = CreateDefaultSubobject<UInventory>(TEXT("Inventory"));
+	AddOwnedComponent(Inventory);
 }
 
 void AGT3_Project5_Gr1Character::BeginPlay()
@@ -72,7 +74,11 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 		}
 	}
 
-	HoldWeapon->AttachWeapon(WeaponType, GetMesh());
+	Inventory->LoadWeapon(GetMesh());
+
+	HoldWeapon->SetAnimInstance(GetMesh()->GetAnimInstance());
+	HoldWeapon->SwitchWeapon(Inventory->GetCurrentWeapon());
+	
 	HoldWeapon->AimingStartEvent.AddLambda([&]()->void
 	{
 		FollowCamera->SetRelativeLocation(FollowCameraOffsetAiming);

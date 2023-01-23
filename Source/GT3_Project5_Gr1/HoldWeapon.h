@@ -19,10 +19,12 @@ public:
 	
 	void SetupPlayerInputComponent(class UEnhancedInputComponent* EnhancedInputComponent);
 
-	void AttachWeapon(TSubclassOf<AWeapon> WeaponType, USkeletalMeshComponent* Mesh);
+	void SetAnimInstance(UAnimInstance* NewAnimInstance) { AnimInstance = NewAnimInstance; }
+	void SwitchWeapon(AWeapon* NewWeapon);
 	
 	void Aim(const FInputActionValue& Value);
 	void Shoot(const FInputActionValue& Value);
+	void ShootAuto(const FInputActionValue& Value);
 	void EndAim(const FInputActionValue& Value);
 	UFUNCTION()
 	void EndShoot();
