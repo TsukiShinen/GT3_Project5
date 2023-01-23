@@ -25,7 +25,10 @@ public:
 
 	void LoadWeapon(USkeletalMeshComponent* Mesh);
 
+	UFUNCTION(BlueprintCallable)
 	AWeapon* GetCurrentWeapon() { return Weapons[CurrentWeaponIndex]; }
+	UFUNCTION(BlueprintCallable)
+	AWeapon* GetSecondWeapon() { return Weapons[CurrentWeaponIndex == 0 ? 1 : 0]; }
 	UPROPERTY()
 	FOnWeaponChanged OnWeaponChanged;
 
@@ -39,7 +42,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Weapon")
 	TArray<TSubclassOf<AWeapon>> WeaponsType;
 	
-	UPROPERTY(BlueprintReadOnly, Category="Weapon")
+	UPROPERTY(BlueprintReadWrite, Category="Weapon")
 	TArray<AWeapon*> Weapons;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Weapon")

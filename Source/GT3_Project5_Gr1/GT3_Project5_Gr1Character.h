@@ -57,6 +57,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int GetScore() const { return Score; }
+
+	UFUNCTION(BlueprintCallable)
+	UInventory* GetInventory() const { return Inventory; }
+	
 	void AddScore(int score) { Score += score; }
 
 protected:
@@ -79,13 +83,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
 	FVector FollowCameraOffsetAiming;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Weapon")
+	UPROPERTY(VisibleAnywhere, Category="Weapon")
 	UHoldWeapon* HoldWeapon;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Weapon")
 	TSubclassOf<AWeapon> WeaponType;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Inventory")
+	UPROPERTY(VisibleAnywhere, Category="Inventory")
 	UInventory* Inventory;
 
 protected:
