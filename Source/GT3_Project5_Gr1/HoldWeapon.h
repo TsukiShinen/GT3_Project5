@@ -24,6 +24,7 @@ public:
 	void Aim(const FInputActionValue& Value);
 	void Shoot(const FInputActionValue& Value);
 	void EndAim(const FInputActionValue& Value);
+	UFUNCTION()
 	void EndShoot();
 
 	DECLARE_EVENT(UHoldWeapon, FAimingStart)

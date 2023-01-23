@@ -74,7 +74,6 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 	FHitResult hit;
 	
 	bool bIsActorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, FCollisionQueryParams(), FCollisionResponseParams());
-	DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 2.0f, .0f, 10.0f);
 	if (bIsActorHit && hit.GetActor())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetName());
