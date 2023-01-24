@@ -40,7 +40,6 @@ void UHoldWeapon::BeginPlay()
 
 void UHoldWeapon::Aim(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("Test"));
 	bIsAiming = true;
 	
 	AimingStartEvent.Broadcast();
@@ -53,8 +52,7 @@ void UHoldWeapon::Aim(const FInputActionValue& Value)
 
 void UHoldWeapon::Shoot(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("Test"));
-	if (bIsShooting) return;
+	if (bIsShooting || bIsReloading) return;
 	if (!Weapon->HasAmmunitionLeft()) return;
 	
 	bIsShooting = true;
