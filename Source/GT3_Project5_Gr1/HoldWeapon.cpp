@@ -17,6 +17,7 @@ void UHoldWeapon::SetupPlayerInputComponent(UEnhancedInputComponent* EnhancedInp
 {
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &UHoldWeapon::Aim);
 	EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &UHoldWeapon::Shoot);
+	EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &UHoldWeapon::Reload);
 	EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &UHoldWeapon::ShootAuto);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &UHoldWeapon::EndAim);
 }
@@ -39,6 +40,7 @@ void UHoldWeapon::BeginPlay()
 
 void UHoldWeapon::Aim(const FInputActionValue& Value)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("Test"));
 	bIsAiming = true;
 	
 	AimingStartEvent.Broadcast();
@@ -51,6 +53,7 @@ void UHoldWeapon::Aim(const FInputActionValue& Value)
 
 void UHoldWeapon::Shoot(const FInputActionValue& Value)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("Test"));
 	if (bIsShooting) return;
 	if (!Weapon->HasAmmunitionLeft()) return;
 	
@@ -96,6 +99,18 @@ void UHoldWeapon::EndAim(const FInputActionValue& Value)
 	AimingEndEvent.Broadcast();
 }
 
+void UHoldWeapon::Reload(const FInputActionValue& Value)
+{
+	if (bIsShooting || bIsReloading) return;
+	
+	bIsReloading = true;
+
+	PlayAnimReload();
+	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
+	OnMontageBlendingOutStarted.BindUFunction(this, "EndReload");
+	AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
+}
+
 void UHoldWeapon::EndShoot()
 {
 	bIsShooting = false;
@@ -105,6 +120,13 @@ void UHoldWeapon::EndShoot()
 		AimingStartEvent.Broadcast();
 		PlayAnimAim();
 	}
+}
+
+void UHoldWeapon::EndReload()
+{
+	Weapon->Reload(Weapon->GetMaxAmmunition());
+	
+	bIsReloading = false;
 }
 
 

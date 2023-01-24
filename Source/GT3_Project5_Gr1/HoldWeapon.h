@@ -26,8 +26,11 @@ public:
 	void Shoot(const FInputActionValue& Value);
 	void ShootAuto(const FInputActionValue& Value);
 	void EndAim(const FInputActionValue& Value);
+	void Reload(const FInputActionValue& Value);
 	UFUNCTION()
 	void EndShoot();
+	UFUNCTION()
+	void EndReload();
 
 	DECLARE_EVENT(UHoldWeapon, FAimingStart)
 	FAimingStart& OnStartAim() { return AimingStartEvent; }
@@ -45,17 +48,26 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ShootAction;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ReloadAction;
+	
 	UPROPERTY()
 	AWeapon* Weapon;
 	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* ShootMontage;
 	
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* ReloadMontage;
+	
 	UPROPERTY()
 	bool bIsAiming;
 	
 	UPROPERTY()
 	bool bIsShooting;
+	
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsReloading;
 
 	UPROPERTY(VisibleAnywhere)
 	UAnimInstance* AnimInstance;
@@ -65,6 +77,7 @@ protected:
 
 	void PlayAnimAim() const { AnimInstance->Montage_Play(ShootMontage); }
 	void PlayAnimShoot() const { AnimInstance->Montage_Play(ShootMontage); AnimInstance->Montage_JumpToSection(TEXT("Shoot"), ShootMontage); }
+	void PlayAnimReload() const { AnimInstance->Montage_Play(ReloadMontage); }
 	void StopAnimAimAndShoot() const { AnimInstance->Montage_Stop(.5f, ShootMontage); }
 
 public:

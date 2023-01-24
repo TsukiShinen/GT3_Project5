@@ -20,11 +20,14 @@ protected:
 
 public:
 	void Shoot(FVector End, AActor* Actor = nullptr);
+	void Reload(int Amount);
 
 	bool IsAuto() const { return bIsAuto; }
 	bool HasAmmunitionLeft() const { return Ammunition > 0; }
 	UFUNCTION(BlueprintCallable)
 	int GetAmmunition() const { return Ammunition; }
+	UFUNCTION(BlueprintCallable)
+	int GetMaxAmmunition() const { return MaxAmmunition; }
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture* Image;

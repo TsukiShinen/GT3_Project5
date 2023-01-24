@@ -42,3 +42,8 @@ void AWeapon::Shoot(FVector End, AActor* Actor)
 	}
 }
 
+void AWeapon::Reload(const int Amount)
+{
+	Ammunition = Amount;
+}
+

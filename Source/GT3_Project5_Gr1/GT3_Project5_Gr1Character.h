@@ -60,6 +60,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	UInventory* GetInventory() const { return Inventory; }
+	UFUNCTION(BlueprintCallable)
+	UHoldWeapon* GetHoldWeapon() const { return HoldWeapon; }
 	
 	void AddScore(int score) { Score += score; }
 
