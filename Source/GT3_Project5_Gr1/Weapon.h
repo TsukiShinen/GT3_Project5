@@ -12,37 +12,42 @@ class GT3_PROJECT5_GR1_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere)
-	UArrowComponent* SpawnBullet;
-	
-	UPROPERTY(EditAnywhere)
-	USkeletalMeshComponent* VisualMesh;
-
-	UPROPERTY(EditAnywhere)
-	float Damage = 50;
-	
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UDamageType> DamageType;
-
-	UPROPERTY(EditAnywhere)
-	bool bIsAuto;
-
 public:
-	// Sets default values for this actor's properties
 	AWeapon();
 
-	bool IsAuto() const { return bIsAuto; }
-
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+public:
+	void Shoot(FVector End, AActor* Actor = nullptr);
+
+	bool IsAuto() const { return bIsAuto; }
+	bool HasAmmunitionLeft() const { return Ammunition > 0; }
+	UFUNCTION(BlueprintCallable)
+	int GetAmmunition() const { return Ammunition; }
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture* Image;
 
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+protected:
+	UPROPERTY(EditAnywhere)
+	USkeletalMeshComponent* VisualMesh;
+	
+	UPROPERTY(EditAnywhere)
+	UArrowComponent* SpawnBullet;
 
-	void Shoot(FVector End, AActor* Actor = nullptr);
+	UPROPERTY(EditAnywhere)
+	bool bIsAuto;
+
+	UPROPERTY(EditAnywhere)
+	float Damage = 50;
+
+	UPROPERTY(EditAnywhere)
+	int MaxAmmunition;
+
+	UPROPERTY()
+	int Ammunition;
+	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UDamageType> DamageType;
 };

@@ -52,6 +52,7 @@ void UHoldWeapon::Aim(const FInputActionValue& Value)
 void UHoldWeapon::Shoot(const FInputActionValue& Value)
 {
 	if (bIsShooting) return;
+	if (!Weapon->HasAmmunitionLeft()) return;
 	
 	bIsShooting = true;
 
