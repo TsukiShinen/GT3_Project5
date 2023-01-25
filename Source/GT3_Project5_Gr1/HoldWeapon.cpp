@@ -1,8 +1,9 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HoldWeapon.h"
+#include "HoldWeapon.h"	
 #include "EnhancedInputComponent.h"
+#include "GameFramework/Character.h"
 
 
 // Sets default values for this component's properties
@@ -40,6 +41,8 @@ void UHoldWeapon::BeginPlay()
 
 void UHoldWeapon::Aim(const FInputActionValue& Value)
 {
+	if (bIsShooting || bIsReloading) return;
+	
 	bIsAiming = true;
 	
 	AimingStartEvent.Broadcast();
@@ -62,7 +65,9 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
 	OnMontageBlendingOutStarted.BindUFunction(this, "EndShoot");
 	AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
-
+	
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootParticles, Weapon->GetSpawnBullet()->GetComponentLocation(), Weapon->GetSpawnBullet()->GetComponentRotation());
+	
 	FVector start = GetWorld()->GetFirstPlayerController()->PlayerCameraManager->GetCameraLocation();
 	FVector dir = GetWorld()->GetFirstPlayerController()->PlayerCameraManager->GetActorForwardVector();
 	FVector end  = start + (dir * 100000);
@@ -72,10 +77,15 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 	if (bIsActorHit && hit.GetActor())
 	{
 		Weapon->Shoot(hit.ImpactPoint, hit.GetActor());
+
+		UNiagaraSystem* system = Cast<ACharacter>(hit.GetActor()) ? HitOnEnemyParticles : HitParticles;
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), system, hit.ImpactPoint, (start - end).Rotation());
 	} else
 	{
 		Weapon->Shoot(end);
 	}
+
+
 }
 
 void UHoldWeapon::ShootAuto(const FInputActionValue& Value)

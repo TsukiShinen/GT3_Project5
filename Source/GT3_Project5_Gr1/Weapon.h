@@ -28,6 +28,7 @@ public:
 	int GetAmmunition() const { return Ammunition; }
 	UFUNCTION(BlueprintCallable)
 	int GetMaxAmmunition() const { return MaxAmmunition; }
+	UArrowComponent* GetSpawnBullet() const { return SpawnBullet; }
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture* Image;

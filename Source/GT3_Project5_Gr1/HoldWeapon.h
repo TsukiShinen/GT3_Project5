@@ -6,6 +6,8 @@
 #include "InputActionValue.h"
 #include "Weapon.h"
 #include "Components/ActorComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "HoldWeapon.generated.h"
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -59,6 +61,15 @@ protected:
 	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* ReloadMontage;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Asset References")
+	UNiagaraSystem* ShootParticles;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Asset References")
+	UNiagaraSystem* HitParticles;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Asset References")
+	UNiagaraSystem* HitOnEnemyParticles;
 	
 	UPROPERTY()
 	bool bIsAiming;

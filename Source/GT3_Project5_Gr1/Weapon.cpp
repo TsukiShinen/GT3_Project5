@@ -34,7 +34,6 @@ void AWeapon::Shoot(FVector End, AActor* Actor)
 {
 	if (Ammunition <= 0) return;
 	Ammunition--;
-	DrawDebugLine(GetWorld(), SpawnBullet->GetComponentLocation(), End, FColor::Red, false, 2.0f, .0f, 10.0f);
 	if (Actor)
 	{
 		UGameplayStatics::ApplyDamage(Actor, Damage,
