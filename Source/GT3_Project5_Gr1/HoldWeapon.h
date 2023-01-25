@@ -83,6 +83,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UAnimInstance* AnimInstance;
 	
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* ActionDecalToSpawn;
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

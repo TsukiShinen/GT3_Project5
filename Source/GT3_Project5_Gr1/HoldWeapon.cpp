@@ -3,6 +3,8 @@
 
 #include "HoldWeapon.h"	
 #include "EnhancedInputComponent.h"
+#include "Components/DecalComponent.h"
+#include "Engine/DecalActor.h"
 #include "GameFramework/Character.h"
 
 
@@ -80,6 +82,14 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 
 		UNiagaraSystem* system = Cast<ACharacter>(hit.GetActor()) ? HitOnEnemyParticles : HitParticles;
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), system, hit.ImpactPoint, (start - end).Rotation());
+		ADecalActor* decal = GetWorld()->SpawnActor<ADecalActor>(hit.Location, FRotator());
+		if (decal)
+		{
+			decal->SetDecalMaterial(ActionDecalToSpawn);
+			decal->SetLifeSpan(2.0f);
+			decal->SetActorScale3D(FVector(0.2f, 0.2f, 0.2f));
+			decal->GetDecal()->DecalSize = FVector(32.0f, 64.0f, 64.0f);
+		}
 	} else
 	{
 		Weapon->Shoot(end);
