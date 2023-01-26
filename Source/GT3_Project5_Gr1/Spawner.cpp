@@ -32,6 +32,9 @@ void ASpawner::Tick(float DeltaTime)
 
 void ASpawner::Spawn()
 {
-	GetWorld()->SpawnActor<USkeleton>(Enemy, GetActorLocation(), FRotator());
+	if (Enemy)
+	{
+		GetWorld()->SpawnActor<AEnemySkeleton>(Enemy, GetActorLocation(), FRotator());
+	}
 }
 

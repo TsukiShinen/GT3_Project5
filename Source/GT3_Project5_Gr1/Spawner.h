@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EnemySkeleton.h"
 #include "GameFramework/Actor.h"
 #include "Spawner.generated.h"
 
@@ -31,7 +32,7 @@ private:
 	UStaticMeshComponent* VisualMesh;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<USkeleton> Enemy;
+	TSubclassOf<AEnemySkeleton> Enemy;
 	
 	UPROPERTY(EditAnywhere)
 	float SpawnCooldown;
