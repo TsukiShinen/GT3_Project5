@@ -23,6 +23,9 @@ class GT3_PROJECT5_GR1_API AAmmoBrick : public AActor
 
 	UPROPERTY(EditAnywhere)
 	class UNiagaraSystem* VFX;
+
+	UPROPERTY(EditAnywhere)
+	int AmmoAmount = 50;
 	
 public:	
 	// Sets default values for this actor's properties

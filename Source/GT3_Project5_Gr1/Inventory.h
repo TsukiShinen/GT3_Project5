@@ -32,6 +32,9 @@ public:
 	UPROPERTY()
 	FOnWeaponChanged OnWeaponChanged;
 
+	int MaxInventoryAmmo = 200;
+	int InventoryAmmo = MaxInventoryAmmo / 2;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -50,6 +53,10 @@ protected:
 
 public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
-	                           FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE int GetInventoryAmmo() { return InventoryAmmo; }
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE int GetInventoryMaxAmmo() { return MaxInventoryAmmo; }
 };

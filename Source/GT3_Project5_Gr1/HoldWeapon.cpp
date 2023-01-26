@@ -6,6 +6,7 @@
 #include "Components/DecalComponent.h"
 #include "Engine/DecalActor.h"
 #include "GameFramework/Character.h"
+#include "GT3_Project5_Gr1Character.h"
 
 
 // Sets default values for this component's properties
@@ -122,7 +123,8 @@ void UHoldWeapon::Reload(const FInputActionValue& Value)
 	if (bIsShooting || bIsReloading) return;
 	
 	bIsReloading = true;
-
+	
+	//Weapon
 	PlayAnimReload();
 	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
 	OnMontageBlendingOutStarted.BindUFunction(this, "EndReload");
@@ -142,8 +144,23 @@ void UHoldWeapon::EndShoot()
 
 void UHoldWeapon::EndReload()
 {
-	Weapon->Reload(Weapon->GetMaxAmmunition());
+	auto Player = Cast<AGT3_Project5_Gr1Character>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	
+	auto inventoryAmmoAmount = Player->GetInventory()->InventoryAmmo;
+	auto weaponMagSize = Weapon->GetMaxAmmunition();
+	auto weaponMagSizeToReload = Weapon->GetMaxAmmunition() - Weapon->GetAmmunition();
+
+	if (inventoryAmmoAmount - weaponMagSizeToReload >= 0)
+	{
+		Weapon->Reload(weaponMagSize);
+		Player->GetInventory()->InventoryAmmo -= weaponMagSizeToReload;
+	}
+	else
+	{
+		Weapon->Reload(inventoryAmmoAmount);
+		Player->GetInventory()->InventoryAmmo = 0;
+	}
+
 	bIsReloading = false;
 }
 

@@ -52,6 +52,12 @@ void AAmmoBrick::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AMMO PICKUP"));
 		auto Player = Cast<AGT3_Project5_Gr1Character>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		Player->GetInventory()->InventoryAmmo += AmmoAmount;
+		if (Player->GetInventory()->InventoryAmmo > Player->GetInventory()->MaxInventoryAmmo)
+		{
+			Player->GetInventory()->InventoryAmmo = Player->GetInventory()->MaxInventoryAmmo;
+		}
+		Destroy();
 	}
 }
 
