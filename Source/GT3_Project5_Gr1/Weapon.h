@@ -17,23 +17,34 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	void Shoot(FVector End, AActor* Actor = nullptr);
 	void Reload(int Amount);
 
 	bool IsAuto() const { return bIsAuto; }
+	
 	bool HasAmmunitionLeft() const { return Ammunition > 0; }
 	UFUNCTION(BlueprintCallable)
 	int GetAmmunition() const { return Ammunition; }
 	UFUNCTION(BlueprintCallable)
 	int GetMaxAmmunition() const { return MaxAmmunition; }
+	
 	UArrowComponent* GetSpawnBullet() const { return SpawnBullet; }
+	
+	float GetRecoil() const { return Recoil; }
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture* Image;
 
+	UPROPERTY()
+	bool bIsRecoiling;
+
 protected:
+	UPROPERTY()
+	class AGT3_Project5_Gr1Character* Player;
+	
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* VisualMesh;
 	
@@ -51,6 +62,15 @@ protected:
 
 	UPROPERTY()
 	int Ammunition;
+	
+	UPROPERTY(EditAnywhere)
+	float MaxRecoil;
+	
+	UPROPERTY()
+	float Recoil;
+	
+	UPROPERTY()
+	float RecoilRecovery;
 	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UDamageType> DamageType;

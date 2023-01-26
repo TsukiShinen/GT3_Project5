@@ -3,6 +3,7 @@
 
 #include "Weapon.h"
 
+#include "GT3_Project5_Gr1Character.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -28,6 +29,20 @@ void AWeapon::BeginPlay()
 	Super::BeginPlay();
 
 	Ammunition = MaxAmmunition;
+	Player = Cast<AGT3_Project5_Gr1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+}
+
+void AWeapon::Tick(const float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	
+	Recoil = FMath::FInterpTo(Recoil, 0, DeltaSeconds, 10.0f);
+	RecoilRecovery = FMath::FInterpTo(RecoilRecovery, -Recoil, DeltaSeconds, 20.0f);
+	const float ApplyPitch = Recoil + RecoilRecovery;
+
+	if (Player) {
+		Player->AddControllerPitchInput(ApplyPitch);
+	}
 }
 
 void AWeapon::Shoot(FVector End, AActor* Actor)
@@ -39,6 +54,8 @@ void AWeapon::Shoot(FVector End, AActor* Actor)
 		UGameplayStatics::ApplyDamage(Actor, Damage,
 			UGameplayStatics::GetPlayerController(GetWorld(), 0), this, DamageType); 
 	}
+
+	Recoil -= MaxRecoil;
 }
 
 void AWeapon::Reload(const int Amount)
