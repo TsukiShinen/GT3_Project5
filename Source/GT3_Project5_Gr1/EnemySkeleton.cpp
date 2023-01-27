@@ -44,7 +44,13 @@ float AEnemySkeleton::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 	if (Life <= 0)
 	{
 		Life = 0;
-		K2_DestroyActor();
+		IsAlive = false;
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+			{
+				K2_DestroyActor();
+			}, 1, false);
+
 		if (AGT3_Project5_Gr1Character* Player = Cast<AGT3_Project5_Gr1Character>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
 		{
 			Player->AddScore(10);
@@ -53,4 +59,8 @@ float AEnemySkeleton::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 	
 	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
+
+
+
+
 

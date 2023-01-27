@@ -13,29 +13,30 @@ class GT3_PROJECT5_GR1_API AEnemySkeleton : public ACharacter
 
 	UPROPERTY(EditAnywhere)
 	float MaxLife = 100;
-	
+
 	UPROPERTY(EditAnywhere)
 	float Life = 100;
-	
-public:
-	// Sets default values for this character's properties
-	AEnemySkeleton();
-	/*
-	UPROPERTY(EditAnywhere)
-		class USkeletalMeshComponent* SkeletalMesh;*/
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	public:
+		// Sets default values for this character's properties
+		AEnemySkeleton();
+		/*
+		UPROPERTY(EditAnywhere)
+			class USkeletalMeshComponent* SkeletalMesh;*/
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+		bool IsAlive = true;
 
-	virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	protected:
+		// Called when the game starts or when spawned
+		virtual void BeginPlay() override;
 
-	bool IsAlive() const { return Life > 0; }
-};
+	public:
+		// Called every frame
+		virtual void Tick(float DeltaTime) override;
+
+		// Called to bind functionality to input
+		virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+		virtual float TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+}
