@@ -157,7 +157,7 @@ void UHoldWeapon::EndReload()
 	}
 	else
 	{
-		Weapon->Reload(inventoryAmmoAmount);
+		Weapon->Reload(inventoryAmmoAmount+Weapon->GetAmmunition());
 		Player->GetInventory()->InventoryAmmo = 0;
 	}
 
