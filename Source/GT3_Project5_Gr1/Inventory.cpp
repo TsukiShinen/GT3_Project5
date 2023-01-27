@@ -27,6 +27,7 @@ void UInventory::LoadWeapon(USkeletalMeshComponent* Mesh)
 		{
 			Weapon->AttachToComponent(Mesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Weapon_R"));
 			Weapon->SetActorHiddenInGame(true);
+			Weapon->SetActivePickable(false);
 			Weapons.Add(Weapon);
 		}
 	}

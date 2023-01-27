@@ -42,4 +42,5 @@ void AAmmoBrick::OnPickup(AGT3_Project5_Gr1Character* Player)
 	{
 		Player->GetInventory()->InventoryAmmo = Player->GetInventory()->MaxInventoryAmmo;
 	}
+	Destroy();
 }

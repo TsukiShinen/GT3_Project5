@@ -7,6 +7,7 @@
 #include "Engine/DecalActor.h"
 #include "GameFramework/Character.h"
 #include "GT3_Project5_Gr1Character.h"
+#include "Components/ArrowComponent.h"
 
 
 // Sets default values for this component's properties

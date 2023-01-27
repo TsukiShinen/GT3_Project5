@@ -4,6 +4,7 @@
 #include "Weapon.h"
 
 #include "GT3_Project5_Gr1Character.h"
+#include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
@@ -21,6 +22,12 @@ AWeapon::AWeapon()
 	SpawnBullet = CreateDefaultSubobject<UArrowComponent>(TEXT("SpawnBullet"));
 	SpawnBullet->SetupAttachment(VisualMesh);
 
+	
+	Pickable = CreateDefaultSubobject<UPickable>(TEXT("Pickable"));
+	AddOwnedComponent(Pickable);
+	Pickable->AttachTo(VisualMesh);
+	
+	Pickable->OnPickUp.AddDynamic(this, &AWeapon::OnPickup);
 }
 
 // Called when the game starts or when spawned
@@ -61,5 +68,17 @@ void AWeapon::Shoot(FVector End, AActor* Actor)
 void AWeapon::Reload(const int Amount)
 {
 	Ammunition = Amount;
+}
+
+void AWeapon::SetActivePickable(bool isActive)
+{
+	
+	Pickable->Deactivate();
+	
+}
+
+void AWeapon::OnPickup(AGT3_Project5_Gr1Character* newPlayer)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("WEAPON"));
 }
 

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ArrowComponent.h"
+#include "Pickable.h"
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
@@ -31,9 +31,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetMaxAmmunition() const { return MaxAmmunition; }
 	
-	UArrowComponent* GetSpawnBullet() const { return SpawnBullet; }
+	class UArrowComponent* GetSpawnBullet() const { return SpawnBullet; }
 	
 	float GetRecoil() const { return Recoil; }
+
+	void SetActivePickable(bool isActive);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture* Image;
@@ -42,14 +44,20 @@ public:
 	bool bIsRecoiling;
 
 protected:
+	UFUNCTION()
+	void OnPickup(AGT3_Project5_Gr1Character* Player);
+
+	UPROPERTY()
+	class UPickable* Pickable;
+	
 	UPROPERTY()
 	class AGT3_Project5_Gr1Character* Player;
 	
 	UPROPERTY(EditAnywhere)
-	USkeletalMeshComponent* VisualMesh;
+	class USkeletalMeshComponent* VisualMesh;
 	
 	UPROPERTY(EditAnywhere)
-	UArrowComponent* SpawnBullet;
+	class UArrowComponent* SpawnBullet;
 
 	UPROPERTY(EditAnywhere)
 	bool bIsAuto;

@@ -51,7 +51,6 @@ void UPickable::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	if (auto Player = Cast<AGT3_Project5_Gr1Character>(OtherActor))
 	{
 		OnPickUp.Broadcast(Player);
-		GetOwner()->Destroy();
 	}
 }
 

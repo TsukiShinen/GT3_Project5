@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GT3_Project5_Gr1Character.h"
 #include "Components/ActorComponent.h"
 #include "Pickable.generated.h"
 
