@@ -3,29 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "Components/BoxComponent.h"
-#include "NiagaraFunctionLibrary.h"
-#include "NiagaraSystem.h"
 #include "GT3_Project5_Gr1Character.h"
+#include "GameFramework/Actor.h"
+#include "Pickable.h"
 #include "AmmoBrick.generated.h"
 
 UCLASS()
 class GT3_PROJECT5_GR1_API AAmmoBrick : public AActor
 {
 	GENERATED_BODY()
-
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* VisualMesh;
-
-	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* Triggerbox;
-
-	UPROPERTY(EditAnywhere)
-	class UNiagaraSystem* VFX;
-
-	UPROPERTY(EditAnywhere)
-	int AmmoAmount = 50;
 	
 public:	
 	// Sets default values for this actor's properties
@@ -39,7 +25,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+private:
 	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnPickup(AGT3_Project5_Gr1Character* Player);
 
+	UPROPERTY()
+	UPickable* Pickable;
+	
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* VisualMesh;
+
+	UPROPERTY(EditAnywhere)
+	int AmmoAmount = 50;
 };
