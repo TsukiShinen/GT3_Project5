@@ -46,6 +46,8 @@ void UInventory::BeginPlay()
 void UInventory::PickWeapon(AWeapon* NewWeapon, AGT3_Project5_Gr1Character* NewPlayer)
 {
 	const auto OldWeapon = GetCurrentWeapon();
+	OldWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	OldWeapon->SetActorLocationAndRotation(NewWeapon->GetActorLocation(), NewWeapon->GetActorRotation());
 
 	NewWeapon->AttachToComponent(NewPlayer->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Weapon_R"));
 	NewWeapon->SetActivePickable(false);
@@ -53,7 +55,6 @@ void UInventory::PickWeapon(AWeapon* NewWeapon, AGT3_Project5_Gr1Character* NewP
 	Weapons[CurrentWeaponIndex] = NewWeapon;
 	OnWeaponChanged.Broadcast();
 	
-	OldWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	OldWeapon->SetActorHiddenInGame(false);
 	OldWeapon->SetActivePickable(true);
 }
