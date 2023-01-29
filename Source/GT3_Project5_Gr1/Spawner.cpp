@@ -38,7 +38,9 @@ void ASpawner::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ASpawner::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ASpawner::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
+                              class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+                              const FHitResult& SweepResult)
 {
 	if (OtherActor == GetWorld()->GetFirstPlayerController()->GetPawn())
 	{
@@ -46,7 +48,8 @@ void ASpawner::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class A
 	}
 }
 
-void ASpawner::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void ASpawner::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+                            int32 OtherBodyIndex)
 {
 	if (OtherActor == GetWorld()->GetFirstPlayerController()->GetPawn())
 	{
@@ -61,4 +64,3 @@ void ASpawner::Spawn()
 		GetWorld()->SpawnActor<AEnemySkeleton>(Enemy, GetActorLocation(), FRotator());
 	}
 }
-

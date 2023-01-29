@@ -19,12 +19,12 @@ class GT3_PROJECT5_GR1_API UHoldWeapon : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	UHoldWeapon();
-	
+
 	void SetupPlayerInputComponent(class UEnhancedInputComponent* EnhancedInputComponent);
 
 	void SetAnimInstance(UAnimInstance* NewAnimInstance) { AnimInstance = NewAnimInstance; }
-	void SwitchWeapon(AWeapon* NewWeapon);
-	
+	void SwitchWeapon(AWeapon* NewWeapon, AWeapon* SecondWeapon = nullptr);
+
 	void Aim(const FInputActionValue& Value);
 	void Shoot(const FInputActionValue& Value);
 	void ShootAuto(const FInputActionValue& Value);
@@ -36,62 +36,70 @@ public:
 	void EndReload();
 
 	DECLARE_EVENT(UHoldWeapon, FAimingStart)
+
 	FAimingStart& OnStartAim() { return AimingStartEvent; }
-	
+
 	DECLARE_EVENT(UHoldWeapon, FAimingEnd)
+
 	FAimingEnd& OnEndAim() { return AimingEndEvent; }
-	
+
 	FAimingStart AimingStartEvent;
 	FAimingEnd AimingEndEvent;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* AimAction;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ShootAction;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ReloadAction;
-	
+
 	UPROPERTY()
 	AWeapon* Weapon;
-	
+
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* ShootMontage;
-	
+
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* ReloadMontage;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Asset References")
 	UNiagaraSystem* ShootParticles;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Asset References")
 	UNiagaraSystem* HitParticles;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Asset References")
 	UNiagaraSystem* HitOnEnemyParticles;
-	
+
 	UPROPERTY()
 	bool bIsAiming;
-	
+
 	UPROPERTY()
 	bool bIsShooting;
-	
+
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsReloading;
 
 	UPROPERTY(VisibleAnywhere)
 	UAnimInstance* AnimInstance;
-	
+
 	UPROPERTY(EditAnywhere)
 	UMaterialInterface* ActionDecalToSpawn;
-	
+
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	void PlayAnimAim() const { AnimInstance->Montage_Play(ShootMontage); }
-	void PlayAnimShoot() const { AnimInstance->Montage_Play(ShootMontage); AnimInstance->Montage_JumpToSection(TEXT("Shoot"), ShootMontage); }
+
+	void PlayAnimShoot() const
+	{
+		AnimInstance->Montage_Play(ShootMontage);
+		AnimInstance->Montage_JumpToSection(TEXT("Shoot"), ShootMontage);
+	}
+
 	void PlayAnimReload() const { AnimInstance->Montage_Play(ReloadMontage); }
 	void StopAnimAimAndShoot() const { AnimInstance->Montage_Stop(.5f, ShootMontage); }
 

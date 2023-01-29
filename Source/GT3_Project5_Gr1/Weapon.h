@@ -25,19 +25,20 @@ public:
 	void Reload(int Amount);
 
 	bool IsAuto() const { return bIsAuto; }
-	
+
 	bool HasAmmunitionLeft() const { return Ammunition > 0; }
 	UFUNCTION(BlueprintCallable)
 	int GetAmmunition() const { return Ammunition; }
+
 	UFUNCTION(BlueprintCallable)
 	int GetMaxAmmunition() const { return MaxAmmunition; }
-	
+
 	class UArrowComponent* GetSpawnBullet() const { return SpawnBullet; }
-	
+
 	float GetRecoil() const { return Recoil; }
 
 	void SetActivePickable(bool isActive);
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture* Image;
 
@@ -50,13 +51,13 @@ protected:
 
 	UPROPERTY()
 	class UPickable* Pickable;
-	
+
 	UPROPERTY()
 	class AGT3_Project5_Gr1Character* Player;
-	
+
 	UPROPERTY(EditAnywhere)
 	class USkeletalMeshComponent* VisualMesh;
-	
+
 	UPROPERTY(EditAnywhere)
 	class UArrowComponent* SpawnBullet;
 
@@ -71,16 +72,16 @@ protected:
 
 	UPROPERTY()
 	int Ammunition;
-	
+
 	UPROPERTY(EditAnywhere)
 	float MaxRecoil;
-	
+
 	UPROPERTY()
 	float Recoil;
-	
+
 	UPROPERTY()
 	float RecoilRecovery;
-	
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UDamageType> DamageType;
 };

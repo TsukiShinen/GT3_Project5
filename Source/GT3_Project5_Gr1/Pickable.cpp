@@ -14,7 +14,7 @@ UPickable::UPickable()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	
+
 	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &UPickable::OnOverlapBegin);
 }
@@ -24,10 +24,11 @@ UPickable::UPickable()
 void UPickable::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	if (Vfx) 
+
+	if (Vfx)
 	{
-		UNiagaraFunctionLibrary::SpawnSystemAttached(Vfx, GetOwner()->GetRootComponent(), NAME_None, FVector(0.f), FRotator(0.f), EAttachLocation::Type::KeepRelativeOffset, true);
+		UNiagaraFunctionLibrary::SpawnSystemAttached(Vfx, GetOwner()->GetRootComponent(), NAME_None, FVector(0.f),
+		                                             FRotator(0.f), EAttachLocation::Type::KeepRelativeOffset, true);
 	}
 }
 
@@ -68,4 +69,3 @@ void UPickable::Float(float DeltaTime) const
 	NewRotation.Yaw += DeltaRotation;
 	GetOwner()->SetActorLocationAndRotation(NewLocation, NewRotation);
 }
-

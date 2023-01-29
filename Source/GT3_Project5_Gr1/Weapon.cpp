@@ -17,15 +17,15 @@ AWeapon::AWeapon()
 
 	VisualMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 	VisualMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	
+
 	SpawnBullet = CreateDefaultSubobject<UArrowComponent>(TEXT("SpawnBullet"));
 	SpawnBullet->SetupAttachment(VisualMesh);
 
-	
+
 	Pickable = CreateDefaultSubobject<UPickable>(TEXT("Pickable"));
 	AddOwnedComponent(Pickable);
 	Pickable->AttachTo(VisualMesh);
-	
+
 	Pickable->OnPickUp.AddDynamic(this, &AWeapon::OnPickup);
 }
 
@@ -41,24 +41,28 @@ void AWeapon::BeginPlay()
 void AWeapon::Tick(const float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	
+
 	Recoil = FMath::FInterpTo(Recoil, 0, DeltaSeconds, 10.0f);
 	RecoilRecovery = FMath::FInterpTo(RecoilRecovery, -Recoil, DeltaSeconds, 20.0f);
 	const float ApplyPitch = Recoil + RecoilRecovery;
 
-	if (Player) {
+	if (Player)
+	{
 		Player->AddControllerPitchInput(ApplyPitch);
 	}
 }
 
 void AWeapon::Shoot(FVector End, AActor* Actor)
 {
-	if (Ammunition <= 0) return;
+	if (Ammunition <= 0)
+	{
+		return;
+	}
 	Ammunition--;
 	if (Actor)
 	{
 		UGameplayStatics::ApplyDamage(Actor, Damage,
-			UGameplayStatics::GetPlayerController(GetWorld(), 0), this, DamageType); 
+		                              UGameplayStatics::GetPlayerController(GetWorld(), 0), this, DamageType);
 	}
 
 	Recoil -= MaxRecoil;
@@ -79,4 +83,3 @@ void AWeapon::OnPickup(AGT3_Project5_Gr1Character* newPlayer)
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("WEAPON"));
 	newPlayer->GetInventory()->PickWeapon(this, newPlayer);
 }
-

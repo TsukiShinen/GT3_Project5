@@ -16,7 +16,10 @@ void ATestAIC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!Player) return;
+	if (!Player)
+	{
+		return;
+	}
 	MoveToActor();
 }
 

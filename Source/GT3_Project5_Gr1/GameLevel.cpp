@@ -7,6 +7,6 @@
 
 void AGameLevel::BeginPlay()
 {
-	Super::BeginPlay();	
+	Super::BeginPlay();
 	CreateWidget<UUserWidget>(GetWorld(), Hud)->AddToViewport();
 }

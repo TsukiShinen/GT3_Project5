@@ -14,6 +14,3 @@ class AGT3_Project5_Gr1GameMode : public AGameModeBase
 public:
 	AGT3_Project5_Gr1GameMode();
 };
-
-
-

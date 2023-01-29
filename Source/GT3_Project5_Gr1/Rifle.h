@@ -13,5 +13,4 @@ UCLASS()
 class GT3_PROJECT5_GR1_API ARifle : public AWeapon
 {
 	GENERATED_BODY()
-	
 };

@@ -12,7 +12,7 @@ class GT3_PROJECT5_GR1_API UPickable : public UActorComponent
 {
 	GENERATED_BODY()
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPickUp, AGT3_Project5_Gr1Character*, Player);
-	
+
 public:
 	UPickable();
 
@@ -28,14 +28,14 @@ public:
 	class UBoxComponent* GetTriggerBox() const { return TriggerBox; }
 
 	void SetActiveUpdate(const bool bNewActive) { bIsActiveUpdate = bNewActive; }
-	
+
 	UPROPERTY()
 	FOnPickUp OnPickUp;
-	
+
 private:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-						int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	void Float(float DeltaTime) const;
 
@@ -44,7 +44,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class UNiagaraSystem* Vfx;
-	
+
 	UPROPERTY()
 	bool bIsActiveUpdate = true;
 };

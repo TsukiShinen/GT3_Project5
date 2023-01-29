@@ -19,7 +19,7 @@ class GT3_PROJECT5_GR1_API UInventory : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	UInventory();
-	
+
 	void SetupPlayerInputComponent(class UEnhancedInputComponent* EnhancedInputComponent);
 	void ChangeWeapon(const FInputActionValue& Value);
 
@@ -27,8 +27,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	AWeapon* GetCurrentWeapon() { return Weapons[CurrentWeaponIndex]; }
+
 	UFUNCTION(BlueprintCallable)
-	AWeapon* GetSecondWeapon() { return Weapons[CurrentWeaponIndex == 0 ? 1 : 0]; }
+	AWeapon* GetSecondWeapon() { return Weapons.Num() > 1 ? Weapons[CurrentWeaponIndex == 0 ? 1 : 0] : nullptr; }
+
 	UPROPERTY()
 	FOnWeaponChanged OnWeaponChanged;
 
@@ -38,13 +40,13 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ChangeWeaponAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Weapon")
 	TArray<TSubclassOf<AWeapon>> WeaponsType;
-	
+
 	UPROPERTY(BlueprintReadWrite, Category="Weapon")
 	TArray<AWeapon*> Weapons;
 
@@ -53,12 +55,14 @@ protected:
 
 public:
 	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	void PickWeapon(AWeapon* NewWeapon, AGT3_Project5_Gr1Character* NewPlayer);
-	
+
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int GetInventoryAmmo() { return InventoryAmmo; }
+
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int GetInventoryMaxAmmo() { return MaxInventoryAmmo; }
 };

@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "HoldWeapon.h"	
+#include "HoldWeapon.h"
 
 #include "GT3_Project5_Gr1Character.h"
 #include "Components/ArrowComponent.h"
@@ -26,13 +26,18 @@ void UHoldWeapon::SetupPlayerInputComponent(UEnhancedInputComponent* EnhancedInp
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &UHoldWeapon::EndAim);
 }
 
-void UHoldWeapon::SwitchWeapon(AWeapon* NewWeapon)
+void UHoldWeapon::SwitchWeapon(AWeapon* NewWeapon, AWeapon* SecondWeapon)
 {
-	if (Weapon)
+	const auto Player = Cast<AGT3_Project5_Gr1Character>(GetWorld()->GetFirstPlayerController()->GetCharacter());
+	if (SecondWeapon)
 	{
-		Weapon->SetActorHiddenInGame(true);
+		SecondWeapon->SetActorHiddenInGame(true);
+		SecondWeapon->AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+		                                TEXT("SecondWeapon"));
 	}
 	Weapon = NewWeapon;
+	Weapon->AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+	                          TEXT("Weapon_R"));
 	Weapon->SetActorHiddenInGame(false);
 }
 
@@ -44,10 +49,13 @@ void UHoldWeapon::BeginPlay()
 
 void UHoldWeapon::Aim(const FInputActionValue& Value)
 {
-	if (bIsShooting || bIsReloading) return;
-	
+	if (bIsShooting || bIsReloading)
+	{
+		return;
+	}
+
 	bIsAiming = true;
-	
+
 	AimingStartEvent.Broadcast();
 
 	if (!bIsShooting)
@@ -58,9 +66,15 @@ void UHoldWeapon::Aim(const FInputActionValue& Value)
 
 void UHoldWeapon::Shoot(const FInputActionValue& Value)
 {
-	if (bIsShooting || bIsReloading) return;
-	if (!Weapon->HasAmmunitionLeft()) return;
-	
+	if (bIsShooting || bIsReloading)
+	{
+		return;
+	}
+	if (!Weapon->HasAmmunitionLeft())
+	{
+		return;
+	}
+
 	bIsShooting = true;
 
 	PlayAnimShoot();
@@ -68,15 +82,18 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
 	OnMontageBlendingOutStarted.BindUFunction(this, "EndShoot");
 	AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
-	
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootParticles, Weapon->GetSpawnBullet()->GetComponentLocation(), Weapon->GetSpawnBullet()->GetComponentRotation());
-	
+
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootParticles,
+	                                               Weapon->GetSpawnBullet()->GetComponentLocation(),
+	                                               Weapon->GetSpawnBullet()->GetComponentRotation());
+
 	FVector start = GetWorld()->GetFirstPlayerController()->PlayerCameraManager->GetCameraLocation();
 	FVector dir = GetWorld()->GetFirstPlayerController()->PlayerCameraManager->GetActorForwardVector();
-	FVector end  = start + (dir * 100000);
+	FVector end = start + (dir * 100000);
 	FHitResult hit;
-	
-	bool bIsActorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, FCollisionQueryParams(), FCollisionResponseParams());
+
+	bool bIsActorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, FCollisionQueryParams(),
+	                                                        FCollisionResponseParams());
 	if (bIsActorHit && hit.GetActor())
 	{
 		Weapon->Shoot(hit.ImpactPoint, hit.GetActor());
@@ -91,12 +108,11 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 			decal->SetActorScale3D(FVector(0.2f, 0.2f, 0.2f));
 			decal->GetDecal()->DecalSize = FVector(32.0f, 64.0f, 64.0f);
 		}
-	} else
+	}
+	else
 	{
 		Weapon->Shoot(end);
 	}
-
-
 }
 
 void UHoldWeapon::ShootAuto(const FInputActionValue& Value)
@@ -120,10 +136,13 @@ void UHoldWeapon::EndAim(const FInputActionValue& Value)
 
 void UHoldWeapon::Reload(const FInputActionValue& Value)
 {
-	if (bIsShooting || bIsReloading) return;
-	
+	if (bIsShooting || bIsReloading)
+	{
+		return;
+	}
+
 	bIsReloading = true;
-	
+
 	//Weapon
 	PlayAnimReload();
 	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
@@ -134,7 +153,7 @@ void UHoldWeapon::Reload(const FInputActionValue& Value)
 void UHoldWeapon::EndShoot()
 {
 	bIsShooting = false;
-	
+
 	if (bIsAiming)
 	{
 		AimingStartEvent.Broadcast();
@@ -145,7 +164,7 @@ void UHoldWeapon::EndShoot()
 void UHoldWeapon::EndReload()
 {
 	auto Player = Cast<AGT3_Project5_Gr1Character>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	
+
 	auto inventoryAmmoAmount = Player->GetInventory()->InventoryAmmo;
 	auto weaponMagSize = Weapon->GetMaxAmmunition();
 	auto weaponMagSizeToReload = Weapon->GetMaxAmmunition() - Weapon->GetAmmunition();
@@ -157,7 +176,7 @@ void UHoldWeapon::EndReload()
 	}
 	else
 	{
-		Weapon->Reload(inventoryAmmoAmount+Weapon->GetAmmunition());
+		Weapon->Reload(inventoryAmmoAmount + Weapon->GetAmmunition());
 		Player->GetInventory()->InventoryAmmo = 0;
 	}
 
@@ -172,4 +191,3 @@ void UHoldWeapon::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 	// ...
 }
-
