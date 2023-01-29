@@ -31,14 +31,12 @@ void UHoldWeapon::SwitchWeapon(AWeapon* NewWeapon, AWeapon* SecondWeapon)
 	const auto Player = Cast<AGT3_Project5_Gr1Character>(GetWorld()->GetFirstPlayerController()->GetCharacter());
 	if (SecondWeapon)
 	{
-		SecondWeapon->SetActorHiddenInGame(true);
 		SecondWeapon->AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 		                                TEXT("SecondWeapon"));
 	}
 	Weapon = NewWeapon;
 	Weapon->AttachToComponent(Player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 	                          TEXT("Weapon_R"));
-	Weapon->SetActorHiddenInGame(false);
 }
 
 // Called when the game starts

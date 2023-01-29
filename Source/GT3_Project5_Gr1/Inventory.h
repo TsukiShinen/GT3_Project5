@@ -29,7 +29,7 @@ public:
 	AWeapon* GetCurrentWeapon() { return Weapons[CurrentWeaponIndex]; }
 
 	UFUNCTION(BlueprintCallable)
-	AWeapon* GetSecondWeapon() { return Weapons.Num() > 1 ? Weapons[CurrentWeaponIndex == 0 ? 1 : 0] : nullptr; }
+	AWeapon* GetSecondWeapon() { return Weapons[CurrentWeaponIndex == 0 ? 1 : 0]; }
 
 	UPROPERTY()
 	FOnWeaponChanged OnWeaponChanged;
