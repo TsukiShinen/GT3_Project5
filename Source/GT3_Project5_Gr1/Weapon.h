@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Pickable.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "Weapon.generated.h"
 
 UCLASS()

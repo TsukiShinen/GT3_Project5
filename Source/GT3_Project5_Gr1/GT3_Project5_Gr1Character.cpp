@@ -4,13 +4,9 @@
 
 #include <Windows.Data.Text.h>
 
-#include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "Components/InputComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/Controller.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputSubsystems.h"
 
 
@@ -21,7 +17,7 @@ AGT3_Project5_Gr1Character::AGT3_Project5_Gr1Character()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -45,10 +41,11 @@ AGT3_Project5_Gr1Character::AGT3_Project5_Gr1Character()
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = CameraArmLenght; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-	
+
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	// Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 	FollowCamera->SetRelativeLocation(FollowCameraOffset);
 
@@ -68,7 +65,8 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 	//Add Input Mapping Context
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<
+			UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
@@ -80,14 +78,14 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 
 	HoldWeapon->SetAnimInstance(GetMesh()->GetAnimInstance());
 	HoldWeapon->SwitchWeapon(Inventory->GetCurrentWeapon());
-	
-	HoldWeapon->AimingStartEvent.AddLambda([&]()->void
+
+	HoldWeapon->AimingStartEvent.AddLambda([&]()-> void
 	{
 		FollowCamera->SetRelativeLocation(FollowCameraOffsetAiming);
 		CameraBoom->TargetArmLength = CameraArmLenghtAiming;
 		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeedWhileAiming;
 	});
-	HoldWeapon->OnEndAim().AddLambda([&]()->void
+	HoldWeapon->OnEndAim().AddLambda([&]()-> void
 	{
 		FollowCamera->SetRelativeLocation(FollowCameraOffset);
 		CameraBoom->TargetArmLength = CameraArmLenght;
@@ -101,22 +99,23 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
 		//Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		//Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AGT3_Project5_Gr1Character::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this,
+		                                   &AGT3_Project5_Gr1Character::Move);
 
 		//Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AGT3_Project5_Gr1Character::Look);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this,
+		                                   &AGT3_Project5_Gr1Character::Look);
 
 		Inventory->SetupPlayerInputComponent(EnhancedInputComponent);
 		HoldWeapon->SetupPlayerInputComponent(EnhancedInputComponent);
 	}
-
 }
 
 void AGT3_Project5_Gr1Character::Move(const FInputActionValue& Value)
@@ -132,7 +131,7 @@ void AGT3_Project5_Gr1Character::Move(const FInputActionValue& Value)
 
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
+
 		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 

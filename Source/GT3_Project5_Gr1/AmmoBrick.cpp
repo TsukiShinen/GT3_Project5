@@ -3,7 +3,6 @@
 
 #include "AmmoBrick.h"
 
-#include "GT3_Project5_Gr1Character.h"
 
 // Sets default values
 AAmmoBrick::AAmmoBrick()

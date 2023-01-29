@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
-#include "Weapon.h"
-#include "Components/ActorComponent.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Weapon.h"
+#include "Components/ActorComponent.h"
 #include "HoldWeapon.generated.h"
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))

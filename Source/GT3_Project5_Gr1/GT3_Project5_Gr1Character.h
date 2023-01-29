@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "HoldWeapon.h"
-#include "GameFramework/Character.h"
 #include "InputActionValue.h"
-#include "InputMappingContext.h"
 #include "Inventory.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "GT3_Project5_Gr1Character.generated.h"
 
 

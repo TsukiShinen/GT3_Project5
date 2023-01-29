@@ -54,6 +54,8 @@ protected:
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	void PickWeapon(AWeapon* NewWeapon, AGT3_Project5_Gr1Character* NewPlayer);
 	
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE int GetInventoryAmmo() { return InventoryAmmo; }

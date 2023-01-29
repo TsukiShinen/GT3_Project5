@@ -5,7 +5,6 @@
 
 #include "GT3_Project5_Gr1Character.h"
 #include "Components/ArrowComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -72,13 +71,12 @@ void AWeapon::Reload(const int Amount)
 
 void AWeapon::SetActivePickable(bool isActive)
 {
-	
-	Pickable->Deactivate();
-	
+	Pickable->SetActiveUpdate(isActive);
 }
 
 void AWeapon::OnPickup(AGT3_Project5_Gr1Character* newPlayer)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("WEAPON"));
+	newPlayer->GetInventory()->PickWeapon(this, newPlayer);
 }
 

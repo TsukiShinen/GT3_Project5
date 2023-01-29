@@ -4,6 +4,7 @@
 #include "Inventory.h"
 
 #include "EnhancedInputComponent.h"
+#include "GT3_Project5_Gr1Character.h"
 #include "InputTriggers.h"
 
 
@@ -40,6 +41,21 @@ void UInventory::BeginPlay()
 
 	// ...
 	
+}
+
+void UInventory::PickWeapon(AWeapon* NewWeapon, AGT3_Project5_Gr1Character* NewPlayer)
+{
+	const auto OldWeapon = GetCurrentWeapon();
+
+	NewWeapon->AttachToComponent(NewPlayer->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, TEXT("Weapon_R"));
+	NewWeapon->SetActivePickable(false);
+	
+	Weapons[CurrentWeaponIndex] = NewWeapon;
+	OnWeaponChanged.Broadcast();
+	
+	OldWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	OldWeapon->SetActorHiddenInGame(false);
+	OldWeapon->SetActivePickable(true);
 }
 
 void UInventory::SetupPlayerInputComponent(UEnhancedInputComponent* EnhancedInputComponent)

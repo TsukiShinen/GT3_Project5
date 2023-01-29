@@ -4,6 +4,7 @@
 #include "Pickable.h"
 
 #include "GT3_Project5_Gr1Character.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Components/BoxComponent.h"
 
 
@@ -36,6 +37,7 @@ void UPickable::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if (!bIsActiveUpdate) { return; }
 	Float(DeltaTime);
 }
 
@@ -48,6 +50,7 @@ void UPickable::AttachTo(USceneComponent* Component) const
 void UPickable::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
                                int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (!bIsActiveUpdate) { return; }
 	if (auto Player = Cast<AGT3_Project5_Gr1Character>(OtherActor))
 	{
 		OnPickUp.Broadcast(Player);

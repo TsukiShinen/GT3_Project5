@@ -26,6 +26,8 @@ public:
 	void AttachTo(USceneComponent* Component) const;
 
 	class UBoxComponent* GetTriggerBox() const { return TriggerBox; }
+
+	void SetActiveUpdate(const bool bNewActive) { bIsActiveUpdate = bNewActive; }
 	
 	UPROPERTY()
 	FOnPickUp OnPickUp;
@@ -42,4 +44,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class UNiagaraSystem* Vfx;
+	
+	UPROPERTY()
+	bool bIsActiveUpdate = true;
 };

@@ -2,12 +2,11 @@
 
 
 #include "HoldWeapon.h"	
-#include "EnhancedInputComponent.h"
-#include "Components/DecalComponent.h"
-#include "Engine/DecalActor.h"
-#include "GameFramework/Character.h"
+
 #include "GT3_Project5_Gr1Character.h"
 #include "Components/ArrowComponent.h"
+#include "Components/DecalComponent.h"
+#include "Engine/DecalActor.h"
 
 
 // Sets default values for this component's properties

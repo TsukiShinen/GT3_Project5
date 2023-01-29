@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GT3_Project5_Gr1Character.h"
 #include "GameFramework/Actor.h"
-#include "Pickable.h"
 #include "AmmoBrick.generated.h"
 
 UCLASS()
