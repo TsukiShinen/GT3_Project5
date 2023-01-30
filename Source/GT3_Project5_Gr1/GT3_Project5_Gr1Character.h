@@ -65,6 +65,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UHoldWeapon* GetHoldWeapon() const { return HoldWeapon; }
 
+	int MaxHP = 200;
+	int HP = MaxHP;
+
 	void AddScore(int score) { Score += score; }
 
 protected:
@@ -115,4 +118,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	FORCEINLINE class UInventory* GetInventory() { return Inventory; }
+
+	FORCEINLINE int GetHP() { return HP; }
+	FORCEINLINE void SetHP(int newHPValue) { HP = newHPValue; }
 };
