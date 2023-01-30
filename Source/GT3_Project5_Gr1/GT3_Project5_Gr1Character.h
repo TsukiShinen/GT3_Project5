@@ -65,8 +65,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UHoldWeapon* GetHoldWeapon() const { return HoldWeapon; }
 
-	int MaxHP = 200;
-	int HP = MaxHP;
+	float MaxHP = 200;
+	float HP = MaxHP;
+
+	UFUNCTION(BlueprintCallable)
+	float GetMaxHP() { return MaxHP; }
+	UFUNCTION(BlueprintCallable)
+	float GetHP() { return HP; }
+
+	UFUNCTION(BlueprintCallable)
+	void DealDamage(float damage);
 
 	void AddScore(int score) { Score += score; }
 
@@ -119,6 +127,5 @@ public:
 
 	FORCEINLINE class UInventory* GetInventory() { return Inventory; }
 
-	FORCEINLINE int GetHP() { return HP; }
-	FORCEINLINE void SetHP(int newHPValue) { HP = newHPValue; }
+	FORCEINLINE void SetHP(float newHPValue) { HP = newHPValue; }
 };

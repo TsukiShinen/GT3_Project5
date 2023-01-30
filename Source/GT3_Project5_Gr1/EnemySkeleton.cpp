@@ -69,8 +69,26 @@ void AEnemySkeleton::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("ENTER"));
 		IsAttacking = true;
+
 		PlayAttackAnim();
+
+		/* Crash ici
+		* 
+		FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
+		OnMontageBlendingOutStarted.BindUFunction(this, "PlayAttackAnim");
+		AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
+		*/
 	}
+}
+
+void AEnemySkeleton::PlayAttackAnim()
+{ 
+	AnimInstance->Montage_Play(AM_Skeleton_Attack);
+}
+
+void AEnemySkeleton::StopAttackAnim()
+{
+	AnimInstance->Montage_Stop(0.5f, AM_Skeleton_Attack);
 }
 
 void AEnemySkeleton::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -82,3 +100,5 @@ void AEnemySkeleton::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* O
 		StopAttackAnim();
 	}
 }
+
+
