@@ -46,6 +46,8 @@ public:
 	FAimingStart AimingStartEvent;
 	FAimingEnd AimingEndEvent;
 
+	UAnimMontage* GetShootMontage() const;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* AimAction;
@@ -61,6 +63,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* ShootMontage;
+	
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* ShootHandGunMontage;
 
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* ReloadMontage;
@@ -92,16 +97,16 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void PlayAnimAim() const { AnimInstance->Montage_Play(ShootMontage); }
+	void PlayAnimAim() const { AnimInstance->Montage_Play(GetShootMontage()); }
 
 	void PlayAnimShoot() const
 	{
-		AnimInstance->Montage_Play(ShootMontage);
-		AnimInstance->Montage_JumpToSection(TEXT("Shoot"), ShootMontage);
+		AnimInstance->Montage_Play(GetShootMontage());
+		AnimInstance->Montage_JumpToSection(TEXT("Shoot"), GetShootMontage());
 	}
 
 	void PlayAnimReload() const { AnimInstance->Montage_Play(ReloadMontage); }
-	void StopAnimAimAndShoot() const { AnimInstance->Montage_Stop(.5f, ShootMontage); }
+	void StopAnimAimAndShoot() const { AnimInstance->Montage_Stop(.5f, GetShootMontage()); }
 
 public:
 	// Called every frame

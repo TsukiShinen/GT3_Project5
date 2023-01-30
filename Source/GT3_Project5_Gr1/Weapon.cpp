@@ -62,7 +62,7 @@ void AWeapon::Shoot(FVector End, AActor* Actor)
 	if (Actor)
 	{
 		UGameplayStatics::ApplyDamage(Actor, Damage,
-		                              UGameplayStatics::GetPlayerController(GetWorld(), 0), this, DamageType);
+									  UGameplayStatics::GetPlayerController(GetWorld(), 0), this, DamageType);
 	}
 
 	Recoil -= MaxRecoil;

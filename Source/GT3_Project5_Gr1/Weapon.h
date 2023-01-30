@@ -8,28 +8,37 @@
 #include "Kismet/GameplayStatics.h"
 #include "Weapon.generated.h"
 
-UCLASS()
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	HandGun     UMETA(DisplayName = "HandGun"),
+	SemiAuto      UMETA(DisplayName = "SemiAuto"),
+	Auto   UMETA(DisplayName = "Auto"),
+	Pulse   UMETA(DisplayName = "Pulse"),
+	Sniper   UMETA(DisplayName = "Sniper"),
+  };
+
+UCLASS(Abstract)
 class GT3_PROJECT5_GR1_API AWeapon : public AActor
 {
 	GENERATED_BODY()
+	
 
 public:
 	AWeapon();
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
 
 public:
-	void Shoot(FVector End, AActor* Actor = nullptr);
+	virtual void Tick(float DeltaSeconds) override;
+	
+	virtual void Shoot(FVector End, AActor* Actor = nullptr);
 	void Reload(int Amount);
-
-	bool IsAuto() const { return bIsAuto; }
-
+	
 	bool HasAmmunitionLeft() const { return Ammunition > 0; }
 	UFUNCTION(BlueprintCallable)
 	int GetAmmunition() const { return Ammunition; }
-
 	UFUNCTION(BlueprintCallable)
 	int GetMaxAmmunition() const { return MaxAmmunition; }
 
@@ -38,6 +47,8 @@ public:
 	float GetRecoil() const { return Recoil; }
 
 	void SetActivePickable(bool isActive);
+	
+	EWeaponType GetWeaponType() const { return WeaponType; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture* Image;
@@ -62,26 +73,24 @@ protected:
 	class UArrowComponent* SpawnBullet;
 
 	UPROPERTY(EditAnywhere)
-	bool bIsAuto;
-
-	UPROPERTY(EditAnywhere)
 	float Damage = 50;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UDamageType> DamageType;
 
 	UPROPERTY(EditAnywhere)
 	int MaxAmmunition;
-
 	UPROPERTY()
 	int Ammunition;
 
 	UPROPERTY(EditAnywhere)
 	float MaxRecoil;
-
 	UPROPERTY()
 	float Recoil;
 
 	UPROPERTY()
 	float RecoilRecovery;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UDamageType> DamageType;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EWeaponType WeaponType;
 };
+

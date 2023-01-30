@@ -64,14 +64,8 @@ void UHoldWeapon::Aim(const FInputActionValue& Value)
 
 void UHoldWeapon::Shoot(const FInputActionValue& Value)
 {
-	if (bIsShooting || bIsReloading)
-	{
-		return;
-	}
-	if (!Weapon->HasAmmunitionLeft())
-	{
-		return;
-	}
+	if (bIsShooting || bIsReloading) return;
+	if (!Weapon->HasAmmunitionLeft()) return;
 
 	bIsShooting = true;
 
@@ -115,7 +109,7 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 
 void UHoldWeapon::ShootAuto(const FInputActionValue& Value)
 {
-	if (Weapon->IsAuto())
+	if (Weapon->GetWeaponType() == EWeaponType::Auto)
 	{
 		Shoot(Value);
 	}
@@ -179,6 +173,24 @@ void UHoldWeapon::EndReload()
 	}
 
 	bIsReloading = false;
+}
+
+UAnimMontage* UHoldWeapon::GetShootMontage() const
+{
+	switch (Weapon->GetWeaponType()) {
+		case EWeaponType::HandGun:
+			return ShootHandGunMontage;
+		case EWeaponType::SemiAuto:
+			return ShootMontage;
+		case EWeaponType::Auto:
+			return ShootMontage;
+		case EWeaponType::Pulse:
+			return ShootMontage;
+		case EWeaponType::Sniper:
+			return ShootMontage;
+		default: ;
+	}
+	return nullptr;
 }
 
 
