@@ -118,6 +118,15 @@ void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent
 	}
 }
 
+void AGT3_Project5_Gr1Character::DealDamage(float damage)
+{
+	HP -= damage;
+	if (HP < 0)
+	{
+		HP = 0;
+	}
+}
+
 void AGT3_Project5_Gr1Character::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D

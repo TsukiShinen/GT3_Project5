@@ -43,8 +43,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* AM_Skeleton_Attack;
 
-	void PlayAttackAnim() const { AnimInstance->Montage_Play(AM_Skeleton_Attack); }
-	void StopAttackAnim() const { AnimInstance->Montage_Stop(0.5f, AM_Skeleton_Attack); }
+	void PlayAttackAnim();
+	void StopAttackAnim();
 
 private:
 	UPROPERTY(VisibleAnywhere)

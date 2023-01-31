@@ -30,6 +30,6 @@ void ADeathZone::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 {
 	if (auto Player = Cast<AGT3_Project5_Gr1Character>(OtherActor))
 	{
-		Player->SetHP(0);
+		Player->DealDamage(Player->MaxHP);
 	}
 }
