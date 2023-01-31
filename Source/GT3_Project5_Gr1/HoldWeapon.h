@@ -36,15 +36,17 @@ public:
 	void EndReload();
 
 	DECLARE_EVENT(UHoldWeapon, FAimingStart)
-
 	FAimingStart& OnStartAim() { return AimingStartEvent; }
 
 	DECLARE_EVENT(UHoldWeapon, FAimingEnd)
-
 	FAimingEnd& OnEndAim() { return AimingEndEvent; }
+	
+	DECLARE_EVENT(UHoldWeapon, FSniping)
+	FSniping& OnSniping() { return SnipingEvent; }
 
 	FAimingStart AimingStartEvent;
 	FAimingEnd AimingEndEvent;
+	FSniping SnipingEvent;
 
 	UAnimMontage* GetShootMontage() const;
 
@@ -116,4 +118,10 @@ public:
 protected:
 	UPROPERTY()
 	int IndexPulse = 0;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> SniperHud;
+
+	UPROPERTY()
+	UUserWidget* SniperWidget;
 };

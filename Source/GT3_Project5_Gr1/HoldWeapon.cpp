@@ -4,6 +4,7 @@
 #include "HoldWeapon.h"
 
 #include "GT3_Project5_Gr1Character.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/ArrowComponent.h"
 #include "Components/DecalComponent.h"
 #include "Engine/DecalActor.h"
@@ -43,6 +44,9 @@ void UHoldWeapon::SwitchWeapon(AWeapon* NewWeapon, AWeapon* SecondWeapon)
 void UHoldWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
+	SniperWidget = CreateWidget<UUserWidget>(GetWorld(), SniperHud);
 }
 
 void UHoldWeapon::Aim(const FInputActionValue& Value)
@@ -54,7 +58,16 @@ void UHoldWeapon::Aim(const FInputActionValue& Value)
 
 	bIsAiming = true;
 
-	AimingStartEvent.Broadcast();
+	if (Weapon->GetWeaponType() == EWeaponType::Sniper)
+	{
+		SnipingEvent.Broadcast();
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->PlayerCameraManager->SetFOV(30);
+		SniperWidget->AddToViewport();
+	} else
+	{
+		AimingStartEvent.Broadcast();
+	}
+
 
 	if (!bIsShooting)
 	{
@@ -118,7 +131,9 @@ void UHoldWeapon::ShootAuto(const FInputActionValue& Value)
 void UHoldWeapon::EndAim(const FInputActionValue& Value)
 {
 	bIsAiming = false;
-
+	
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->PlayerCameraManager->SetFOV(0);
+	SniperWidget->RemoveFromParent();
 	if (!bIsShooting)
 	{
 		StopAnimAimAndShoot();
@@ -159,7 +174,15 @@ void UHoldWeapon::EndShoot(const FInputActionValue& Value)
 	
 	if (bIsAiming)
 	{
-		AimingStartEvent.Broadcast();
+		if (Weapon->GetWeaponType() == EWeaponType::Sniper)
+		{
+			SnipingEvent.Broadcast();
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->PlayerCameraManager->SetFOV(30);
+			SniperWidget->AddToViewport();
+		} else
+		{
+			AimingStartEvent.Broadcast();
+		}
 		PlayAnimAim();
 	}
 }

@@ -17,7 +17,7 @@ AGT3_Project5_Gr1Character::AGT3_Project5_Gr1Character()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
+	
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -90,6 +90,12 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 		FollowCamera->SetRelativeLocation(FollowCameraOffset);
 		CameraBoom->TargetArmLength = CameraArmLenght;
 		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeed;
+	});
+	HoldWeapon->OnSniping().AddLambda([&]()-> void
+	{
+		FollowCamera->SetRelativeLocation(FollowCameraOffsetSnipe);
+		CameraBoom->TargetArmLength = CameraArmLenghtSnipe;
+		GetCharacterMovement()->MaxWalkSpeed = MaxWalkSpeedWhileAiming;
 	});
 }
 

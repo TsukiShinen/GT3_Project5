@@ -97,6 +97,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
 	FVector FollowCameraOffsetAiming;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	float CameraArmLenghtSnipe = -100;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	FVector FollowCameraOffsetSnipe;
+
 	UPROPERTY(VisibleAnywhere, Category="Weapon")
 	UHoldWeapon* HoldWeapon;
 
