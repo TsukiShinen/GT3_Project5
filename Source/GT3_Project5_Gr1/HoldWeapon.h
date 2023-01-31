@@ -31,7 +31,7 @@ public:
 	void EndAim(const FInputActionValue& Value);
 	void Reload(const FInputActionValue& Value);
 	UFUNCTION()
-	void EndShoot();
+	void EndShoot(const FInputActionValue& Value);
 	UFUNCTION()
 	void EndReload();
 
@@ -112,4 +112,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
+
+protected:
+	UPROPERTY()
+	int IndexPulse = 0;
 };

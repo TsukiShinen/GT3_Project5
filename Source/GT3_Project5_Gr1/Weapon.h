@@ -45,6 +45,7 @@ public:
 	class UArrowComponent* GetSpawnBullet() const { return SpawnBullet; }
 
 	float GetRecoil() const { return Recoil; }
+	int GetPulseBullets() const { return PulseBullets; }
 
 	void SetActivePickable(bool isActive);
 	
@@ -86,9 +87,11 @@ protected:
 	float MaxRecoil;
 	UPROPERTY()
 	float Recoil;
-
 	UPROPERTY()
 	float RecoilRecovery;
+
+	UPROPERTY(EditAnywhere)
+	int PulseBullets;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EWeaponType WeaponType;

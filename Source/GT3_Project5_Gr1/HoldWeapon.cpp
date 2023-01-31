@@ -72,7 +72,7 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 	PlayAnimShoot();
 
 	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
-	OnMontageBlendingOutStarted.BindUFunction(this, "EndShoot");
+	OnMontageBlendingOutStarted.BindUFunction(this, "EndShoot", Value);
 	AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootParticles,
@@ -142,10 +142,21 @@ void UHoldWeapon::Reload(const FInputActionValue& Value)
 	AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
 }
 
-void UHoldWeapon::EndShoot()
+void UHoldWeapon::EndShoot(const FInputActionValue& Value)
 {
 	bIsShooting = false;
 
+	if (Weapon->GetWeaponType() == EWeaponType::Pulse)
+	{
+		IndexPulse++;
+		if (IndexPulse < Weapon->GetPulseBullets())
+		{
+			Shoot(Value);
+			return;
+		}
+		IndexPulse = 0;
+	}
+	
 	if (bIsAiming)
 	{
 		AimingStartEvent.Broadcast();
@@ -177,20 +188,27 @@ void UHoldWeapon::EndReload()
 
 UAnimMontage* UHoldWeapon::GetShootMontage() const
 {
+	UAnimMontage* Montage = nullptr;
 	switch (Weapon->GetWeaponType()) {
 		case EWeaponType::HandGun:
-			return ShootHandGunMontage;
+			Montage = ShootHandGunMontage;
+			break;
 		case EWeaponType::SemiAuto:
-			return ShootMontage;
+			Montage = ShootMontage;
+			break;
 		case EWeaponType::Auto:
-			return ShootMontage;
+			Montage = ShootMontage;
+			break;
 		case EWeaponType::Pulse:
-			return ShootMontage;
+			Montage = ShootMontage;
+			break;
 		case EWeaponType::Sniper:
-			return ShootMontage;
+			Montage = ShootMontage;
+			break;
 		default: ;
 	}
-	return nullptr;
+	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, Montage->GetName());
+	return Montage;
 }
 
 
