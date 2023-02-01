@@ -78,11 +78,17 @@ void UHoldWeapon::Aim(const FInputActionValue& Value)
 void UHoldWeapon::Shoot(const FInputActionValue& Value)
 {
 	if (bIsShooting || bIsReloading) return;
-	if (!Weapon->HasAmmunitionLeft()) return;
+	if (!Weapon->HasAmmunitionLeft())
+	{
+		UAudioComponent* AudioComponent = UGameplayStatics::SpawnSound2D(this, Weapon->EmptyCue);
+		return;
+	}
 
 	bIsShooting = true;
 
 	PlayAnimShoot();
+
+	UAudioComponent* AudioComponent = UGameplayStatics::SpawnSound2D(this, Weapon->SoundCue);
 
 	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
 	OnMontageBlendingOutStarted.BindUFunction(this, "EndShoot", Value);
@@ -149,6 +155,8 @@ void UHoldWeapon::Reload(const FInputActionValue& Value)
 	}
 
 	bIsReloading = true;
+
+	UAudioComponent* AudioComponent = UGameplayStatics::SpawnSound2D(this, Weapon->ReloadCue);
 
 	//Weapon
 	PlayAnimReload();

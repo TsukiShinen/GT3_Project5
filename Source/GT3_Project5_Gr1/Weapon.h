@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Pickable.h"
+#include "Sound/SoundCue.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
 #include "Weapon.generated.h"
@@ -53,6 +54,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UTexture* Image;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class USoundCue* SoundCue;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class USoundCue* ReloadCue;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class USoundCue* EmptyCue;
 
 	UPROPERTY()
 	bool bIsRecoiling;

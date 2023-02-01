@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GT3_Project5_Gr1Character.h"
+#include "Sound/SoundCue.h"
 #include "GameFramework/Actor.h"
 #include "AmmoBrick.generated.h"
 
@@ -23,6 +24,9 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class USoundCue* PickupCue;
 
 private:
 	UFUNCTION()
