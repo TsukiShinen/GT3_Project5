@@ -11,6 +11,8 @@ UCLASS()
 class GT3_PROJECT5_GR1_API AEnemySkeleton : public ACharacter
 {
 	GENERATED_BODY()
+	
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 
 	UPROPERTY(EditAnywhere)
 	float MaxLife = 100;
@@ -27,6 +29,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	bool IsAttacking = false;
+	
+	UPROPERTY()
+	FOnDeath OnDeath;
 
 protected:
 	// Called when the game starts or when spawned

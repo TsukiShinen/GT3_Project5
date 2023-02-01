@@ -52,6 +52,7 @@ float AEnemySkeleton::TakeDamage(float Damage, const FDamageEvent& DamageEvent, 
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 		{
+			OnDeath.Broadcast();
 			K2_DestroyActor();
 		}, 1, false);
 

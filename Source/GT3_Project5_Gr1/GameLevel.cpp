@@ -11,6 +11,8 @@ void AGameLevel::BeginPlay()
 	CreateWidget<UUserWidget>(GetWorld(), Hud)->AddToViewport();
 
 	CurrentZombieSpawned = 0;
+	CurrentZombieAlive = 0;
+	CurrentPhase = 0;
 
 	for (const auto Spawner : LstSpawner)
 	{
@@ -19,17 +21,55 @@ void AGameLevel::BeginPlay()
 	}
 }
 
-void AGameLevel::OnSpawn()
+void AGameLevel::DeactivateSpawner()
+{
+	for (const auto Spawner : LstSpawner)
+	{
+		Spawner->SetActive(false);
+	}
+}
+
+void AGameLevel::OnSpawn(AEnemySkeleton* EnemySpawned)
 {
 	CurrentZombieSpawned ++;
-
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, FString::FromInt(CurrentZombieSpawned));
-	if (CurrentZombieSpawned >= ZombiesPerPhase[0])
+	CurrentZombieAlive++;
+	
+	EnemySpawned->OnDeath.AddDynamic(this, &AGameLevel::OnEnemyDeath);
+	if (CurrentZombieSpawned >= ZombiesPerPhase[CurrentPhase])
 	{
-		for (const auto Spawner : LstSpawner)
-		{
-			Spawner->SetActive(false);
-		}
+		DeactivateSpawner();
+	}
+}
+
+void AGameLevel::ActivateSpawner()
+{
+	CurrentZombieSpawned = 0;
+	CurrentZombieAlive = 0;
+	for (const auto Spawner : LstSpawner)
+	{
+		Spawner->SetActive(true);
+	}
+}
+
+void AGameLevel::NextPhase()
+{
+	if (CurrentPhase < ZombiesPerPhase.Num())
+	{
+		CurrentPhase++;
+		ActivateSpawner();
+	} else
+	{
+		// TODO : WIN
+	}
+}
+
+void AGameLevel::OnEnemyDeath()
+{
+	CurrentZombieAlive--;
+
+	if (CurrentZombieAlive <= 0)
+	{
+		NextPhase();
 	}
 }
 

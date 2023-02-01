@@ -61,7 +61,7 @@ void ASpawner::Spawn()
 {
 	if (Enemy && Spawning && bIsActive)
 	{
-		GetWorld()->SpawnActor<AEnemySkeleton>(Enemy, GetActorLocation(), FRotator());
-		OnSpawn.Broadcast();
+		AEnemySkeleton* EnemySpawned = GetWorld()->SpawnActor<AEnemySkeleton>(Enemy, GetActorLocation(), FRotator());
+		OnSpawn.Broadcast(EnemySpawned);
 	}
 }

@@ -13,7 +13,7 @@ class GT3_PROJECT5_GR1_API ASpawner : public AActor
 {
 	GENERATED_BODY()
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSpawn);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpawn, AEnemySkeleton*, EnemySpawned);
 
 public:
 	// Sets default values for this actor's properties
