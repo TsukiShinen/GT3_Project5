@@ -120,9 +120,6 @@ void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this,
 		                                   &AGT3_Project5_Gr1Character::Look);
 
-		//Pause
-		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
-
 		Inventory->SetupPlayerInputComponent(EnhancedInputComponent);
 		HoldWeapon->SetupPlayerInputComponent(EnhancedInputComponent);
 	}

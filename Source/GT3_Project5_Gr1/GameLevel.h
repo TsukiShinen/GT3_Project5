@@ -17,6 +17,7 @@ class GT3_PROJECT5_GR1_API AGameLevel : public ALevelScriptActor
 
 public:
 	virtual void BeginPlay() override;
+	void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent);
 
 protected:
 	UFUNCTION()
@@ -31,6 +32,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TArray<int> ZombiesPerPhase;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* PauseAction;
+
 	UPROPERTY()
 	int CurrentZombieSpawned;
+
+	UFUNCTION()
+	void PauseGame();
 };

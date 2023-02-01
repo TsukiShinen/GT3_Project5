@@ -2,7 +2,7 @@
 
 
 #include "GameLevel.h"
-
+#include "EnhancedInputComponent.h"
 #include "Blueprint/UserWidget.h"
 
 void AGameLevel::BeginPlay()
@@ -30,5 +30,18 @@ void AGameLevel::OnSpawn()
 		{
 			Spawner->SetActive(false);
 		}
+	}
+}
+
+void AGameLevel::PauseGame()
+{
+	GetWorld()->GetFirstPlayerController()->SetPause(true);
+}
+
+void AGameLevel::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+{
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &AGameLevel::PauseGame);
 	}
 }
