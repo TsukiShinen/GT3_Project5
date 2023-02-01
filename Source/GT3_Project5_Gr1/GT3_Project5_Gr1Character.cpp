@@ -5,6 +5,7 @@
 #include <Windows.Data.Text.h>
 
 #include "EnhancedInputComponent.h"
+#include "GameLevel.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -118,6 +119,9 @@ void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this,
 		                                   &AGT3_Project5_Gr1Character::Look);
+
+		//Pause
+		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 
 		Inventory->SetupPlayerInputComponent(EnhancedInputComponent);
 		HoldWeapon->SetupPlayerInputComponent(EnhancedInputComponent);
