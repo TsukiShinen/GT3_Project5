@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Spawner.h"
 #include "Engine/LevelScriptActor.h"
 #include "GameLevel.generated.h"
 
@@ -18,6 +19,18 @@ public:
 	virtual void BeginPlay() override;
 
 protected:
+	UFUNCTION()
+	void OnSpawn();
+	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> Hud;
+	
+	UPROPERTY(EditAnywhere)
+	TArray<ASpawner*> LstSpawner;
+	
+	UPROPERTY(EditAnywhere)
+	TArray<int> ZombiesPerPhase;
+
+	UPROPERTY()
+	int CurrentZombieSpawned;
 };

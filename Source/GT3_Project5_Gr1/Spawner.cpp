@@ -59,8 +59,9 @@ void ASpawner::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherAc
 
 void ASpawner::Spawn()
 {
-	if (Enemy && Spawning)
+	if (Enemy && Spawning && bIsActive)
 	{
 		GetWorld()->SpawnActor<AEnemySkeleton>(Enemy, GetActorLocation(), FRotator());
+		OnSpawn.Broadcast();
 	}
 }

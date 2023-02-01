@@ -13,8 +13,7 @@ class GT3_PROJECT5_GR1_API ASpawner : public AActor
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* Triggerbox;
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSpawn);
 
 public:
 	// Sets default values for this actor's properties
@@ -34,11 +33,19 @@ public:
 
 	UFUNCTION()
 	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor,
-	                  class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	void SetActive(const bool bActive) { bIsActive = bActive;}
+	
+	UPROPERTY()
+	FOnSpawn OnSpawn;
 
 private:
 	UFUNCTION()
 	void Spawn();
+
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* Triggerbox;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* VisualMesh;
@@ -53,4 +60,6 @@ private:
 	FTimerDelegate Delegate;
 
 	bool Spawning = false;
+
+	bool bIsActive = true;
 };
