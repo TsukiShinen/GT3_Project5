@@ -3,6 +3,7 @@
 
 #include "EnemySkeleton.h"
 #include "GT3_Project5_Gr1Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -47,6 +48,7 @@ float AEnemySkeleton::TakeDamage(float Damage, const FDamageEvent& DamageEvent, 
 	{
 		Life = 0;
 		IsAlive = false;
+		GetCharacterMovement()->Deactivate();
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 		{

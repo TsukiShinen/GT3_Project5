@@ -22,8 +22,9 @@ public:
 	// Sets default values for this character's properties
 	AEnemySkeleton();
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool IsAlive = true;
+
 	UPROPERTY(VisibleAnywhere)
 	bool IsAttacking = false;
 
