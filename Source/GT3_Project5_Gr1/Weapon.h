@@ -47,6 +47,7 @@ public:
 
 	float GetRecoil() const { return Recoil; }
 	int GetPulseBullets() const { return PulseBullets; }
+	float GetCooldown() const { return Cooldown; }
 
 	void SetActivePickable(bool isActive);
 	
@@ -102,6 +103,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	int PulseBullets;
+
+	UPROPERTY(EditAnywhere)
+	float Cooldown;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EWeaponType WeaponType;

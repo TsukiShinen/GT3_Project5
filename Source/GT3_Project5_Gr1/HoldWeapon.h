@@ -124,4 +124,7 @@ protected:
 
 	UPROPERTY()
 	UUserWidget* SniperWidget;
+
+	FTimerHandle ShootCooldownHandler;
+	FTimerDelegate ShootCooldownDelegate;
 };

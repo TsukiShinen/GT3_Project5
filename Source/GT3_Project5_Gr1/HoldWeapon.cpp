@@ -90,9 +90,8 @@ void UHoldWeapon::Shoot(const FInputActionValue& Value)
 
 	UAudioComponent* AudioComponent = UGameplayStatics::SpawnSound2D(this, Weapon->SoundCue);
 
-	FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
-	OnMontageBlendingOutStarted.BindUFunction(this, "EndShoot", Value);
-	AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
+	ShootCooldownDelegate.BindUFunction(this, "EndShoot");
+	GetWorld()->GetTimerManager().SetTimer(ShootCooldownHandler, ShootCooldownDelegate, Weapon->GetCooldown(), false);
 
 	UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ShootParticles,
 	                                               Weapon->GetSpawnBullet()->GetComponentLocation(),
