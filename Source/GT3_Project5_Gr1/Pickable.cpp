@@ -6,6 +6,7 @@
 #include "GT3_Project5_Gr1Character.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values for this component's properties
@@ -17,6 +18,8 @@ UPickable::UPickable()
 
 	TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
 	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &UPickable::OnOverlapBegin);
+	
+	Text = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Text"));
 }
 
 
@@ -33,6 +36,15 @@ void UPickable::BeginPlay()
 }
 
 
+void UPickable::SetTextLookAtPlayer() const
+{
+	const auto TextLocation = Text->GetComponentLocation();
+	const auto PlayerLocation = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation();
+	const auto NewRotation = UKismetMathLibrary::FindLookAtRotation(TextLocation, PlayerLocation);
+
+	Text->SetWorldRotation(NewRotation);
+}
+
 // Called every frame
 void UPickable::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -40,12 +52,16 @@ void UPickable::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (!bIsActiveUpdate) { return; }
 	Float(DeltaTime);
+	SetTextLookAtPlayer();
 }
 
 void UPickable::AttachTo(USceneComponent* Component) const
 {
 	TriggerBox->SetupAttachment(Component);
 	TriggerBox->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+	
+	Text->SetupAttachment(Component);
+	Text->SetRelativeLocation(FVector(0, 0, 50));
 }
 
 void UPickable::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,

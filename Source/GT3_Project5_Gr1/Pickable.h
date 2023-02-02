@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "Pickable.generated.h"
 
 
@@ -18,6 +19,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	void SetTextLookAtPlayer() const;
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
@@ -27,7 +29,7 @@ public:
 
 	class UBoxComponent* GetTriggerBox() const { return TriggerBox; }
 
-	void SetActiveUpdate(const bool bNewActive) { bIsActiveUpdate = bNewActive; }
+	void SetActiveUpdate(const bool bNewActive) { bIsActiveUpdate = bNewActive; Text->SetHiddenInGame(!bNewActive); }
 
 	UPROPERTY()
 	FOnPickUp OnPickUp;
@@ -47,4 +49,7 @@ private:
 
 	UPROPERTY()
 	bool bIsActiveUpdate = true;
+
+	UPROPERTY(EditAnywhere)
+	UTextRenderComponent* Text;
 };
