@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Spawner.h"
+#include "Kismet/GameplayStatics.h"
 #include "Engine/LevelScriptActor.h"
 #include "GameLevel.generated.h"
 

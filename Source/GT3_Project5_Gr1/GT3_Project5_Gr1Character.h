@@ -6,6 +6,7 @@
 #include "HoldWeapon.h"
 #include "InputActionValue.h"
 #include "Inventory.h"
+#include "GameLevel.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -77,6 +78,18 @@ public:
 	void DealDamage(float damage);
 
 	void AddScore(int score) { Score += score; }
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class USoundCue* AmbiantCue;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class USoundCue* MusicCue;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> DeathHUD;
+
+	UPROPERTY()
+	UUserWidget* DeathWidget;
 
 protected:
 	/** Called for movement input */

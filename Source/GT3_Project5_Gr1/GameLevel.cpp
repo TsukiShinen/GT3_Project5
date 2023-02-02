@@ -3,7 +3,9 @@
 
 #include "GameLevel.h"
 #include "EnhancedInputComponent.h"
+#include "ScoreGameInstance.h"
 #include "Blueprint/UserWidget.h"
+#include "GT3_Project5_Gr1Character.h"
 
 void AGameLevel::BeginPlay()
 {
@@ -53,13 +55,18 @@ void AGameLevel::ActivateSpawner()
 
 void AGameLevel::NextPhase()
 {
+	CurrentPhase++;
 	if (CurrentPhase < ZombiesPerPhase.Num())
 	{
-		CurrentPhase++;
 		ActivateSpawner();
 	} else
 	{
-		// TODO : WIN
+		auto Player = Cast<AGT3_Project5_Gr1Character>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		auto GI = Cast<UScoreGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		
+		GI->SetScore(Player->GetScore());
+		
+		UGameplayStatics::OpenLevel(GetWorld(), "EndMenu");
 	}
 }
 
@@ -85,3 +92,4 @@ void AGameLevel::SetupPlayerInputComponent(class UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(PauseAction, ETriggerEvent::Triggered, this, &AGameLevel::PauseGame);
 	}
 }
+

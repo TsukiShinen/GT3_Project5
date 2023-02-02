@@ -6,6 +6,7 @@
 
 #include "EnhancedInputComponent.h"
 #include "GameLevel.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -73,6 +74,9 @@ void AGT3_Project5_Gr1Character::BeginPlay()
 		}
 	}
 
+	UAudioComponent* AudioComponent = UGameplayStatics::SpawnSound2D(this, AmbiantCue);
+	UAudioComponent* AudioComponent2 = UGameplayStatics::SpawnSound2D(this, MusicCue);
+
 	Inventory->LoadWeapon(GetMesh());
 
 	Inventory->OnWeaponChanged.AddDynamic(this, &AGT3_Project5_Gr1Character::OnWeaponChanged);
@@ -128,9 +132,12 @@ void AGT3_Project5_Gr1Character::SetupPlayerInputComponent(class UInputComponent
 void AGT3_Project5_Gr1Character::DealDamage(float damage)
 {
 	HP -= damage;
-	if (HP < 0)
+	if (HP <= 0)
 	{
 		HP = 0;
+		DeathWidget = CreateWidget<UUserWidget>(GetWorld(), DeathHUD);
+		DeathWidget->AddToViewport();
+		GetWorld()->GetFirstPlayerController()->bShowMouseCursor = true;
 	}
 }
 
