@@ -35,7 +35,6 @@ void AAmmoBrick::Tick(float DeltaTime)
 
 void AAmmoBrick::OnPickup(AGT3_Project5_Gr1Character* Player)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("TEST"));
 	Player->GetInventory()->InventoryAmmo += AmmoAmount;
 	UAudioComponent* AudioComponent = UGameplayStatics::SpawnSound2D(this, PickupCue);
 	if (Player->GetInventory()->InventoryAmmo > Player->GetInventory()->MaxInventoryAmmo)

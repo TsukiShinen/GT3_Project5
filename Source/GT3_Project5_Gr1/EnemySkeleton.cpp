@@ -18,7 +18,6 @@ AEnemySkeleton::AEnemySkeleton()
 
 	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemySkeleton::OnOverlapBegin);
 	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &AEnemySkeleton::OnOverlapEnd);
-
 }
 
 // Called when the game starts or when spawned
@@ -26,6 +25,7 @@ void AEnemySkeleton::BeginPlay()
 {
 	Super::BeginPlay();
 	AnimInstance = GetMesh()->GetAnimInstance();
+	UAudioComponent* AudioComponent = UGameplayStatics::SpawnSound2D(this, EnemyCue);
 }
 
 // Called every frame
@@ -70,17 +70,9 @@ void AEnemySkeleton::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor*
 {
 	if (auto Player = Cast<AGT3_Project5_Gr1Character>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("ENTER"));
 		IsAttacking = true;
 
 		PlayAttackAnim();
-
-		/* Crash ici
-		* 
-		FOnMontageBlendingOutStarted OnMontageBlendingOutStarted;
-		OnMontageBlendingOutStarted.BindUFunction(this, "PlayAttackAnim");
-		AnimInstance->Montage_SetBlendingOutDelegate(OnMontageBlendingOutStarted);
-		*/
 	}
 }
 
@@ -98,7 +90,6 @@ void AEnemySkeleton::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* O
 {
 	if (auto Player = Cast<AGT3_Project5_Gr1Character>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("QUIT"));
 		IsAttacking = false;
 		StopAttackAnim();
 	}

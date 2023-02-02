@@ -80,6 +80,5 @@ void AWeapon::SetActivePickable(bool isActive)
 
 void AWeapon::OnPickup(AGT3_Project5_Gr1Character* newPlayer)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("WEAPON"));
 	newPlayer->GetInventory()->PickWeapon(this, newPlayer);
 }

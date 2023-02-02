@@ -15,10 +15,10 @@ void AGameLevel::BeginPlay()
 	CurrentZombieSpawned = 0;
 	CurrentZombieAlive = 0;
 	CurrentPhase = 0;
+	CurrentZombiesLeftToBeKilled = ZombiesPerPhase[CurrentPhase];
 
 	for (const auto Spawner : LstSpawner)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, TEXT("SPAWNER !"));
 		Spawner->OnSpawn.AddDynamic(this, &AGameLevel::OnSpawn);
 	}
 }
@@ -47,6 +47,7 @@ void AGameLevel::ActivateSpawner()
 {
 	CurrentZombieSpawned = 0;
 	CurrentZombieAlive = 0;
+	CurrentZombiesLeftToBeKilled = ZombiesPerPhase[CurrentPhase];
 	for (const auto Spawner : LstSpawner)
 	{
 		Spawner->SetActive(true);
@@ -73,8 +74,8 @@ void AGameLevel::NextPhase()
 void AGameLevel::OnEnemyDeath()
 {
 	CurrentZombieAlive--;
-
-	if (CurrentZombieAlive <= 0)
+	CurrentZombiesLeftToBeKilled--;
+	if (CurrentZombiesLeftToBeKilled <= 0)
 	{
 		NextPhase();
 	}

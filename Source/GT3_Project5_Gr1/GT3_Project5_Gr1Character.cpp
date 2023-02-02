@@ -172,7 +172,7 @@ void AGT3_Project5_Gr1Character::Look(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerYawInput(LookAxisVector.X * 0.5f);
+		AddControllerPitchInput(LookAxisVector.Y * 0.5f);
 	}
 }

@@ -237,7 +237,6 @@ UAnimMontage* UHoldWeapon::GetShootMontage() const
 			break;
 		default: ;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Red, Montage->GetName());
 	return Montage;
 }
 

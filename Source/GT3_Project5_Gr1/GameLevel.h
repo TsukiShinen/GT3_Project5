@@ -35,20 +35,23 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TArray<ASpawner*> LstSpawner;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<int> ZombiesPerPhase;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	int CurrentPhase;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* PauseAction;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	int CurrentZombieSpawned;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	int CurrentZombieAlive;
+
+	UPROPERTY(BlueprintReadOnly)
+	int CurrentZombiesLeftToBeKilled;
 
 	UFUNCTION()
 	void PauseGame();

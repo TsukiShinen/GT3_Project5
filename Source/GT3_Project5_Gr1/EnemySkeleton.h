@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Sound/SoundCue.h"
 #include "Components/BoxComponent.h"
 #include "EnemySkeleton.generated.h"
 
@@ -30,6 +31,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	bool IsAttacking = false;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class USoundCue* EnemyCue;
+
 	UPROPERTY()
 	FOnDeath OnDeath;
 
